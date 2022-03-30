@@ -108,7 +108,17 @@ class Cell {
     this.#mergeTile.y = this.#y
   }
 
-  canAccept = (tile) => (this.tile == null || (this.mergeTile == null && this.tile.value === tile.value))
+  canAccept(tile) {
+    if (this.tile == null) {
+      return true
+    }
+
+    if (this.mergeTile == null && this.tile.value === tile.value) {
+      return true
+    }
+
+    return false
+  }
 
   mergeTiles() {
     if (this.tile == null || this.mergeTile == null) {

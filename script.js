@@ -145,9 +145,9 @@ function canMove(cells) {
         return false
       }
 
-      const moveToCell = group[index - 1]
+      const movingCell = group[index - 1]
 
-      return moveToCell.canAccept(cell.tile)
+      return movingCell.canAccept(cell.tile)
     })
   })
 }

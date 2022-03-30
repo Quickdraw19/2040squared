@@ -18,7 +18,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 60vh;
-  margin: 0;
+  margin: 50px;
 }
 
 #game-board {

@@ -47,6 +47,10 @@ export default class Tile {
   }
 
   getInitialValue() {
+    if (Math.random() > 0.9) {
+      return 0
+    }
+
     return Math.random() > 0.5 ? 2 : 4
   }
 
