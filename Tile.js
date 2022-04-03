@@ -4,11 +4,11 @@ export default class Tile {
   #y
   #value
 
-  constructor(tileContainer) {
+  constructor(tileContainer, difficulty) {
     this.#tileElement = document.createElement("div")
     this.#tileElement.classList.add("tile")
     tileContainer.append(this.#tileElement)
-    this.value = this.getInitialValue()
+    this.value = this.getInitialValue(difficulty)
   }
 
   get value() {
@@ -49,8 +49,8 @@ export default class Tile {
     this.#tileElement.style.setProperty("--y", value)
   }
 
-  getInitialValue() {
-    if (Math.random() > 0.9) {
+  getInitialValue(difficulty) {
+    if (Math.random() > difficulty) {
       return Math.random() > 0.5 ? 0 : '⍬'
     }
 

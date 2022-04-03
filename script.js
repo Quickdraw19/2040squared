@@ -2,10 +2,11 @@ import Grid from "./Grid.js"
 import Tile from "./Tile.js"
 
 const gameBoard = document.getElementById("game-board")
+let difficulty = 0.9
 
 const grid = new Grid(gameBoard)
-grid.randomEmptyCell().tile = new Tile(gameBoard)
-grid.randomEmptyCell().tile = new Tile(gameBoard)
+grid.randomEmptyCell().tile = new Tile(gameBoard, difficulty)
+grid.randomEmptyCell().tile = new Tile(gameBoard, difficulty)
 
 let setupInput = () => window.addEventListener("keydown", handleInput, { once: true })
 
@@ -58,7 +59,7 @@ async function handleInput(e) {
 
   grid.cells.forEach(cell => cell.mergeTiles())
 
-  const newTile = new Tile(gameBoard)
+  const newTile = new Tile(gameBoard, difficulty)
   grid.randomEmptyCell().tile = newTile
 
   if (!canMoveUp() && !canMoveDown() && !canMoveLeft() && !canMoveRight()) {
