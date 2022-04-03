@@ -117,11 +117,25 @@ class Cell {
       return true
     }
 
+    // if (this.tile.value == 0 || tile.value == 0) {
+    //   return true
+    // }
+
     return false
   }
 
   mergeTiles() {
     if (this.tile == null || this.mergeTile == null) {
+      return
+    }
+
+    if (this.tile.value == 0 && this.mergeTile.value == 0) {
+      this.mergeTile.remove()
+      this.mergeTile = null
+      this.tile.remove()
+      this.tile = null
+      totalScore = 0
+      document.getElementById('score-value').innerHTML = totalScore.toLocaleString()
       return
     }
 

@@ -147,7 +147,8 @@ function canMove(cells) {
 
       const movingCell = group[index - 1]
 
-      return movingCell.canAccept(cell.tile)
+      let isMovable = movingCell.canAccept(cell.tile)
+      return isMovable
     })
   })
 }
