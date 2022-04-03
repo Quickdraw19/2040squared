@@ -117,9 +117,9 @@ class Cell {
       return true
     }
 
-    // if (this.tile.value == 0 || tile.value == 0) {
-    //   return true
-    // }
+    if ((this.tile.value == 0 || tile.value == 0) && (tile.value == '⍬' || this.tile.value == '⍬')) {
+      return true
+    }
 
     return false
   }
@@ -139,10 +139,19 @@ class Cell {
       return
     }
 
-    this.tile.value = this.tile.value + this.mergeTile.value
-    totalScore += this.#tile.value
+    if ((this.tile.value == 0 && this.mergeTile.value == '⍬') || (this.tile.value == '⍬' && this.mergeTile.value == 0)) {
+      this.mergeTile.remove()
+      this.mergeTile = null
+      this.tile.remove()
+      this.tile = null
+      return
+    }
 
-    document.getElementById('score-value').innerHTML = totalScore.toLocaleString()
+    if (!(this.tile.value == '⍬' && this.mergeTile.value == '⍬')) {
+      this.tile.value = this.tile.value + this.mergeTile.value
+      totalScore += this.#tile.value
+      document.getElementById('score-value').innerHTML = totalScore.toLocaleString()
+    }
 
     this.mergeTile.remove()
     this.mergeTile = null
