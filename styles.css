@@ -1,22 +1,25 @@
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
+  /* box-sizing: border-box; */
   font-family: Arial;
 }
 
 body {
   background-color: #333;
-  font-size: 6vmin;
 }
 
 #gameboard-wrapper {
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
   height: 60vh;
   margin: 50px;
-  float: right
+}
+
+#score-wrapper {
+  font-size: 2em;
+  display: inline-block;
 }
 
 #game-board {
@@ -31,9 +34,8 @@ body {
 }
 
 #score-div,
-#captured-div,
+#locked-div,
 #multiplier-div {
-  text-align: center;
   color: #CCC;
   margin: 40px;
 }
@@ -48,22 +50,23 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: red;
   width: var(--cell-size);
   height: var(--cell-size);
-  background-color: red;
   border-radius: 1vmin;
   top: calc(var(--y) * (var(--cell-size) + var(--cell-gap)) + var(--cell-gap));
   left: calc(var(--x) * (var(--cell-size) + var(--cell-gap)) + var(--cell-gap));
   font-weight: bold;
   background-color: hsl(200, 50%, var(--background-lightness));
   color: hsl(200, 25%, var(--text-lightness));
-  animation: show 200ms ease-in-out;
-  transition: 100ms ease-in-out;
+  animation: show 400ms ease-in-out;
+  transition: 400ms ease-in-out;
+
 }
 
 @keyframes show {
   0% {
     opacity: .5;
-    transform: scale(0);
+    transform: scale(3);
   }
 }

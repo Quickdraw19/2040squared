@@ -146,10 +146,10 @@ class Cell {
       this.mergeTile = null
       this.tile.remove()
       this.tile = null
-      capturedPoints = capturedPoints + totalScore
+      lockedPoints = lockedPoints + totalScore
       totalScore = 0
       document.getElementById('score-value').innerHTML = "0"
-      document.getElementById('captured-points').innerHTML = capturedPoints.toLocaleString()
+      document.getElementById('locked-points').innerHTML = lockedPoints.toLocaleString()
       return
     }
 
@@ -159,11 +159,11 @@ class Cell {
       this.tile.remove()
       this.tile = null
 
-      totalScore = totalScore + (capturedPoints * bonusX)
+      totalScore = totalScore + (lockedPoints * bonusX)
       bonusX = 1
-      capturedPoints = 0
+      lockedPoints = 0
       document.getElementById('score-value').innerHTML = totalScore.toLocaleString()
-      document.getElementById('captured-points').innerHTML = "0"
+      document.getElementById('locked-points').innerHTML = "0"
       document.getElementById('bonus-x').innerHTML = "1"
       return
     }
