@@ -1,7 +1,9 @@
-const GRID_SIZE = 4 // Number of columns and rows (square).
-const CELL_SIZE = 14 // Size of each block in 'vmin' units.
-const CELL_GAP = 2 // Size of the gap between each block in 'vmin' units.
+const GRID_SIZE = 5 // Number of columns and rows (square).
+const CELL_SIZE = 10 // Size of each block in 'vmin' units.
+const CELL_GAP = 1 // Size of the gap between each block in 'vmin' units.
 var totalScore = 0 // Total score for the whole game.
+var bonusX = 1
+var capturedPoints = 0
 
 export default class Grid {
   #cells // ? Array storing the cell info for the whole grid.
@@ -129,13 +131,40 @@ class Cell {
       return
     }
 
+    if (this.tile.value == 'X' && this.mergeTile.value == 'X') {
+      this.mergeTile.remove()
+      this.mergeTile = null
+      this.tile.remove()
+      this.tile = null
+      bonusX = bonusX + 1
+      document.getElementById('bonus-x').innerHTML = bonusX.toLocaleString()
+      return
+    }
+
     if (this.tile.value == 0 && this.mergeTile.value == 0) {
       this.mergeTile.remove()
       this.mergeTile = null
       this.tile.remove()
       this.tile = null
+      capturedPoints = capturedPoints + totalScore
       totalScore = 0
+      document.getElementById('score-value').innerHTML = "0"
+      document.getElementById('captured-points').innerHTML = capturedPoints.toLocaleString()
+      return
+    }
+
+    if (this.tile.value == '⍬' && this.mergeTile.value == '⍬') {
+      this.mergeTile.remove()
+      this.mergeTile = null
+      this.tile.remove()
+      this.tile = null
+
+      totalScore = totalScore + (capturedPoints * bonusX)
+      bonusX = 1
+      capturedPoints = 0
       document.getElementById('score-value').innerHTML = totalScore.toLocaleString()
+      document.getElementById('captured-points').innerHTML = "0"
+      document.getElementById('bonus-x').innerHTML = "1"
       return
     }
 

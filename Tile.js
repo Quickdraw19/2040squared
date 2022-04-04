@@ -25,6 +25,9 @@ export default class Tile {
     } else if (v == '⍬') {
       this.#tileElement.style.setProperty("color", "yellow")
       this.#tileElement.style.setProperty("background-color", "blue")
+    } else if (v == 'X') {
+      this.#tileElement.style.setProperty("color", "white")
+      this.#tileElement.style.setProperty("background-color", "green")
     } else {
       const power = Math.log2(v)
       const backgroundLightness = 100 - power * 9
@@ -51,7 +54,7 @@ export default class Tile {
 
   getInitialValue(difficulty) {
     if (Math.random() > difficulty) {
-      return Math.random() > 0.5 ? 0 : '⍬'
+      return Math.random() > 0.8 ? 'X' : Math.random() > 0.5 ? 0 : '⍬'
     }
 
     return Math.random() > 0.5 ? 2 : 4

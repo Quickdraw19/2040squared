@@ -7,7 +7,7 @@
 
 body {
   background-color: #333;
-  font-size: 7.5vmin;
+  font-size: 6vmin;
 }
 
 #gameboard-wrapper {
@@ -16,6 +16,7 @@ body {
   align-items: center;
   height: 60vh;
   margin: 50px;
+  float: right
 }
 
 #game-board {
@@ -29,7 +30,9 @@ body {
   position: relative;
 }
 
-#score {
+#score-div,
+#captured-div,
+#multiplier-div {
   text-align: center;
   color: #CCC;
   margin: 40px;

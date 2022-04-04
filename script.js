@@ -13,7 +13,9 @@ let setupInput = () => window.addEventListener("keydown", handleInput, { once: t
 setupInput()
 
 // TODOs: Log all movements, tiles created or modified, final scores, total moves. 
-
+// Other ideas:
+//  Wild card tile
+//  When zeros are merged, the score is stashed. Can be recovered by merging two neg zeros. Perhaps add a multiplier to stashed scores?
 async function handleInput(e) {
   switch (e.key) {
     case "ArrowUp":
