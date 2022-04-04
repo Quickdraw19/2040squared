@@ -1,9 +1,10 @@
 const GRID_SIZE = 5 // Number of columns and rows (square).
 const CELL_SIZE = 10 // Size of each block in 'vmin' units.
 const CELL_GAP = 1 // Size of the gap between each block in 'vmin' units.
+
 var totalScore = 0 // Total score for the whole game.
 var bonusX = 1
-var capturedPoints = 0
+var lockedPoints = 0
 
 export default class Grid {
   #cells // ? Array storing the cell info for the whole grid.
