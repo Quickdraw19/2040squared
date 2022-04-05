@@ -1,7 +1,6 @@
 *,
 *::before,
 *::after {
-  /* box-sizing: border-box; */
   font-family: Arial;
 }
 
@@ -9,36 +8,21 @@ body {
   background-color: #333;
 }
 
-#gameboard-wrapper {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  height: 60vh;
-  margin: 50px;
-}
-
-#score-wrapper {
-  font-size: 2em;
-  display: inline-block;
+.game-section {
+  float: left;
+  padding: var(--cell-gap);
 }
 
 #game-board {
+  position: relative;
+  display: inline-grid;
   font-size: 2em;
-  display: grid;
+  background-color: #CCC;
+  margin: 50px;
   grid-template-columns: repeat(var(--grid-size), var(--cell-size));
   grid-template-rows: repeat(var(--grid-size), var(--cell-size));
-  background-color: #CCC;
   gap: var(--cell-gap);
   border-radius: 1vmin;
-  padding: var(--cell-gap);
-  position: relative;
-}
-
-#score-div,
-#locked-div,
-#multiplier-div {
-  color: #CCC;
-  margin: 40px;
 }
 
 .cell {
@@ -62,7 +46,6 @@ body {
   color: hsl(200, 25%, var(--text-lightness));
   animation: show 400ms ease-in-out;
   transition: 200ms ease-in-out;
-
 }
 
 @keyframes show {
@@ -70,4 +53,14 @@ body {
     opacity: .5;
     transform: scale(1);
   }
+}
+
+#score-wrapper {
+  font-size: 2em;
+  margin-top: 50px;
+}
+
+.score-display {
+  color: #CCC;
+  margin: 20px;
 }
