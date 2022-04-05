@@ -66,7 +66,7 @@ async function handleInput(e) {
 
   if (!canMoveUp() && !canMoveDown() && !canMoveLeft() && !canMoveRight()) {
     newTile.waitForTransition(true).then(() => {
-      alert("No moves left. Game over, man. Game over!")
+      document.getElementById('#game-over-div').html("No moves left...<br>Game over!")
     })
 
     // Save score and record stats to file or cookie/local storage.
