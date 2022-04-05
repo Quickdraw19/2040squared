@@ -64,3 +64,11 @@ body {
   color: #CCC;
   margin: 20px;
 }
+
+#game-over-div {
+  color: green;
+}
+
+#instructions-div {
+  color: white;
+}
