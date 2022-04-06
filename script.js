@@ -12,10 +12,6 @@ let setupInput = () => window.addEventListener("keydown", handleInput, { once: t
 
 setupInput()
 
-// TODOs: Log all movements, tiles created or modified, final scores, total moves. 
-// Other ideas:
-//  Wild card tile
-//  When zeros are merged, the score is stashed. Can be recovered by merging two neg zeros. Perhaps add a multiplier to stashed scores?
 async function handleInput(e) {
   switch (e.key) {
     case "ArrowUp":
@@ -69,9 +65,6 @@ async function handleInput(e) {
       $('#game-over-div').html("No moves left...<br>Game over!").css("color", "red")
     })
 
-    // Save score and record stats to file or cookie/local storage.
-
-    // Add New Game option.
     return
   }
 

@@ -128,7 +128,6 @@ class Cell {
   }
 
   mergeTiles() {
-    // TODO: Apply bonus X to main score. Locked Points get wiped out if another pair of 0s merge.
     if (this.tile == null || this.mergeTile == null) {
       return
     }
@@ -137,7 +136,6 @@ class Cell {
     When two Xs are merged:
       Increase bonus multiplier (X) by 1.
       All score are multiplied by this factor, including recovered locked points.
-        TODO: Perhaps double the X considering the theme of the game?
     */
     if (this.tile.value == 'X' && this.mergeTile.value == 'X') {
       this.mergeTile.remove()
@@ -163,7 +161,6 @@ class Cell {
 
       // If there are no locked points, then lock the current score.
       // If there are already locked points, then wipe out the points.
-      // TODO: This way, if you lock points and don't collect them before merging 0s again, then you lose all points. If that's too severe then I'll just have it replace the points.
       if (lockedPoints == 0) {
         lockedPoints = lockedPoints + totalScore
       } else {

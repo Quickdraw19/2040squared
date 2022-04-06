@@ -1,0 +1,22 @@
+To dos:
+=======
+Add a start new game button.
+
+=============
+Enhancements:
+=============
+Save score and record stats to file or cookie/local storage.
+
+Analytics: Log all movements, tiles created or modified, final scores, total moves. 
+
+Perhaps double the X considering the theme of the game.
+
+=====
+Bugs:
+=====
+I've noticed that sometimes "0" tiles don't merge correctly. I saw
+that the tile doesn't get deleted and remains in place so that other
+tiles slide on top of it.
+Reproduction:
+    Haven't figured that out yet.
+
