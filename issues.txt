@@ -1,3 +1,14 @@
+⍬
+Currently working on:
+=====================
+Testing to make sure tiles are merging and scoring correctly -
+    I've seem some issues, particularly 0s work at first and then
+    they quit combining or the tile is getting locked in place
+    (as if it's not there but it is, getting orphaned perhaps).
+
+Adding logging to display movement and scoring actions because I keep
+losing track when eyeing it.
+
 To dos:
 =======
 Add a start new game button.
