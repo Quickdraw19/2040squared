@@ -1,10 +1,11 @@
-const GRID_SIZE = 4 // Number of columns and rows (square).
-const CELL_SIZE = 10 // Size of each block in 'vmin' units.
-const CELL_GAP = 1 // Size of the gap between each block in 'vmin' units.
+const GRID_SIZE_NUM = 4 // Number of columns and rows (square).
+const CELL_SIZE_NUM = 10 // Size of each block in 'vmin' units.
+const CELL_GAP_NUM = 1 // Size of the gap between each block in 'vmin' units.
+const DEBUG_MODE = True // Displays a tile merge log.
 
-var totalScore = 0 // Total score for the whole game.
-var bonusX = 1
-var lockedPoints = 0
+var totalScoreNum = 0 // Total score for the whole game.
+var bonusXNum = 1
+var lockedPointsNum = 0
 
 export default class Grid {
   #cells // ? Array storing the cell info for the whole grid.
@@ -12,21 +13,21 @@ export default class Grid {
   // @gridElement: HTML element (ie. <div>) where the grid will be placed.
   constructor(gridElement) {
     // Set up the grid area.
-    gridElement.style.setProperty("--grid-size", GRID_SIZE)
-    gridElement.style.setProperty("--cell-size", `${CELL_SIZE}vmin`)
-    gridElement.style.setProperty("--cell-gap", `${CELL_GAP}vmin`)
+    gridElement.style.setProperty("--grid-size", GRID_SIZE_NUM)
+    gridElement.style.setProperty("--cell-size", `${CELL_SIZE_NUM}vmin`)
+    gridElement.style.setProperty("--cell-gap", `${CELL_GAP_NUM}vmin`)
 
     // Set up the block within the grid.
     // map() runs a given function for each element of an array.
     this.#cells = createCellElements(gridElement).map(
       function (cellElement, index) { // Current element in the array, array index of the element.
-        let block = new Cell(
+        let blockObjCell = new Cell(
           cellElement,
-          index % GRID_SIZE,
-          Math.floor(index / GRID_SIZE)
+          index % GRID_SIZE_NUM,
+          Math.floor(index / GRID_SIZE_NUM)
         )
 
-        return block
+        return blockObjCell
       })
   }
 
@@ -55,8 +56,8 @@ export default class Grid {
   }
 
   randomEmptyCell() {
-    const randomIndex = Math.floor(Math.random() * this.#emptyCells.length)
-    return this.#emptyCells[randomIndex]
+    const RANDOM_INDEX_NUM = Math.floor(Math.random() * this.#emptyCells.length)
+    return this.#emptyCells[RANDOM_INDEX_NUM]
   }
 }
 
@@ -129,6 +130,10 @@ class Cell {
 
   mergeTiles() {
     if (this.tile == null || this.mergeTile == null) {
+      if (DEBUG_MODE) {
+
+      }
+
       return
     }
 
@@ -144,6 +149,11 @@ class Cell {
       this.tile = null
       bonusX = bonusX + 1
       document.getElementById('bonus-x').innerHTML = bonusX.toLocaleString()
+
+      if (DEBUG_MODE) {
+
+      }
+
       return
     }
 
@@ -161,15 +171,19 @@ class Cell {
 
       // If there are no locked points, then lock the current score.
       // If there are already locked points, then wipe out the points.
-      if (lockedPoints == 0) {
-        lockedPoints = lockedPoints + totalScore
+      if (lockedPointsNum == 0) {
+        lockedPointsNum = lockedPointsNum + totalScoreNum
       } else {
-        lockedPoints = 0
+        lockedPointsNum = 0
       }
 
-      totalScore = 0
+      if (DEBUG_MODE) {
+
+      }
+
+      totalScoreNum = 0
       document.getElementById('score-value').innerHTML = "0"
-      document.getElementById('locked-points').innerHTML = lockedPoints.toLocaleString()
+      document.getElementById('locked-points').innerHTML = lockedPointsNum.toLocaleString()
       return
     }
 
@@ -183,10 +197,15 @@ class Cell {
       this.tile.remove()
       this.tile = null
 
-      totalScore = totalScore + (lockedPoints * bonusX)
-      lockedPoints = 0
+      totalScoreNum = totalScoreNum + (lockedPointsNum * bonusXNum)
 
-      document.getElementById('score-value').innerHTML = totalScore.toLocaleString()
+      if (DEBUG_MODE) {
+
+      }
+
+      lockedPointsNum = 0
+
+      document.getElementById('score-value').innerHTML = totalScoreNum.toLocaleString()
       document.getElementById('locked-points').innerHTML = "0"
       document.getElementById('bonus-x').innerHTML = "1"
       return
@@ -201,6 +220,11 @@ class Cell {
       this.mergeTile = null
       this.tile.remove()
       this.tile = null
+
+      if (DEBUG_MODE) {
+
+      }
+
       return
     }
 
@@ -208,24 +232,28 @@ class Cell {
       Everything else should be standard game tiles.
     */
     this.tile.value = this.tile.value + this.mergeTile.value
-    totalScore += this.#tile.value * bonusX
+    totalScoreNum += this.#tile.value * bonusXNum
 
-    document.getElementById('score-value').innerHTML = totalScore.toLocaleString()
+    document.getElementById('score-value').innerHTML = totalScoreNum.toLocaleString()
 
     this.mergeTile.remove()
     this.mergeTile = null
+
+    if (DEBUG_MODE) {
+
+    }
   }
 }
 
 function createCellElements(gridElement) {
-  const cells = []
+  const CELLS_ARR = []
 
-  for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
-    const cell = document.createElement("div")
-    cell.classList.add("cell")
-    cells.push(cell)
-    gridElement.append(cell)
+  for (let i = 0; i < GRID_SIZE_NUM * GRID_SIZE_NUM; i++) {
+    const CELL_DOM_DIV = document.createElement("div")
+    CELL_DOM_DIV.classList.add("cell")
+    CELLS_ARR.push(CELL_DOM_DIV)
+    gridElement.append(CELL_DOM_DIV)
   }
 
-  return cells
+  return CELLS_ARR
 }

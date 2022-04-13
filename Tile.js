@@ -1,14 +1,24 @@
 export default class Tile {
+  // Do these need to be private?
   #tileElement
   #x
   #y
   #value
+  #specialProb
+  #multiplyProb
+  #tileTypes
 
-  constructor(tileContainer, difficulty) {
+  constructor(tileContainer, options) {
     this.#tileElement = document.createElement("div")
     this.#tileElement.classList.add("tile")
     tileContainer.append(this.#tileElement)
-    this.value = this.getInitialValue(difficulty)
+
+    // Set options.
+    this.#specialProb = options.specialTilePercentage
+    this.#multiplyProb = options.multiplierTilePercentage
+    this.#tileTypes = options.useTiles
+
+    this.value = this.getInitialValue()
   }
 
   get value() {
@@ -29,15 +39,15 @@ export default class Tile {
       this.#tileElement.style.setProperty("color", "white")
       this.#tileElement.style.setProperty("background-color", "green")
     } else {
-      const power = Math.log2(v)
-      const backgroundLightness = 100 - power * 9
+      const POWER_NUM = Math.log2(v)
+      const BACKGROUND_LIGHTNESS_NUM = 100 - POWER_NUM * 9
       this.#tileElement.style.setProperty(
         "--background-lightness",
-        `${backgroundLightness}%`
+        `${BACKGROUND_LIGHTNESS_NUM}%`
       )
       this.#tileElement.style.setProperty(
         "--text-lightness",
-        `${backgroundLightness <= 50 ? 90 : 10}%`
+        `${BACKGROUND_LIGHTNESS_NUM <= 50 ? 90 : 10}%`
       )
     }
   }
@@ -52,9 +62,12 @@ export default class Tile {
     this.#tileElement.style.setProperty("--y", value)
   }
 
-  getInitialValue(difficulty) {
-    if (Math.random() > difficulty) {
-      return Math.random() > 0.8 ? 'X' : Math.random() > 0.5 ? 0 : '⍬'
+  getInitialValue() {
+    // Check what bits are set.
+    if (this.#tileTypes & 1) { }
+
+    if (Math.random() <= this.#specialProb) {
+      return Math.random() <= this.#multiplyProb ? 'X' : Math.random() > 0.5 ? 0 : '⍬'
     }
 
     return Math.random() > 0.5 ? 2 : 4

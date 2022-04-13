@@ -1,133 +1,137 @@
 import Grid from "./Grid.js"
 import Tile from "./Tile.js"
 
-const gameBoard = document.getElementById("game-board")
-let difficulty = 0.9
+const GAME_BOARD_DOM_DIV = document.getElementById("game-board")
+const OPTIONS_OBJ = {
+  'specialTilePercentage': 0.5, // Probability that a special tile ("0", "⍬", "X") will appear; eg, 0.1 = 10%.
+  'multiplierTilePercentage': 0, // Probability that an "X" will appear as a special tile; eg, 0.2 = 20% of the special tiles, or 2% of all tiles.
+  'useTiles': 1 // Tile options: 1 = number, 2 = "0" , 4 = "⍬", 8 = "X", 16 = , 32 = , and so on...
+}
 
-const grid = new Grid(gameBoard)
-grid.randomEmptyCell().tile = new Tile(gameBoard, difficulty)
-grid.randomEmptyCell().tile = new Tile(gameBoard, difficulty)
+const GRID_OBJ_GRID = new Grid(GAME_BOARD_DOM_DIV)
+GRID_OBJ_GRID.randomEmptyCell().tile = new Tile(GAME_BOARD_DOM_DIV, OPTIONS_OBJ)
+GRID_OBJ_GRID.randomEmptyCell().tile = new Tile(GAME_BOARD_DOM_DIV, OPTIONS_OBJ)
 
-let setupInput = () => window.addEventListener("keydown", handleInput, { once: true })
+let setupInputFunc = () => window.addEventListener("keydown", handleInput, { once: true })
 
-setupInput()
+setupInputFunc()
 
 async function handleInput(e) {
   switch (e.key) {
     case "ArrowUp":
-      if (!canMoveUp()) {
-        setupInput()
+      if (!canMoveUpFunc()) {
+        setupInputFunc()
         return
       }
 
-      await moveUp()
+      await moveUpFunc()
       break
 
     case "ArrowDown":
-      if (!canMoveDown()) {
-        setupInput()
+      if (!canMoveDownFunc()) {
+        setupInputFunc()
         return
       }
 
-      await moveDown()
+      await moveDownFunc()
       break
 
     case "ArrowLeft":
-      if (!canMoveLeft()) {
-        setupInput()
+      if (!canMoveLeftFunc()) {
+        setupInputFunc()
         return
       }
 
-      await moveLeft()
+      await moveLeftFunc()
       break
 
     case "ArrowRight":
-      if (!canMoveRight()) {
-        setupInput()
+      if (!canMoveRightFunc()) {
+        setupInputFunc()
         return
       }
 
-      await moveRight()
+      await moveRightFunc()
       break
 
     default:
-      setupInput()
+      setupInputFunc()
       return
   }
 
-  grid.cells.forEach(cell => cell.mergeTiles())
+  GRID_OBJ_GRID.cells.forEach(cell => cell.mergeTiles())
 
-  const newTile = new Tile(gameBoard, difficulty)
-  grid.randomEmptyCell().tile = newTile
+  const NEW_TILE_OBJ_TILE = new Tile(GAME_BOARD_DOM_DIV, OPTIONS_OBJ)
+  GRID_OBJ_GRID.randomEmptyCell().tile = NEW_TILE_OBJ_TILE
 
-  if (!canMoveUp() && !canMoveDown() && !canMoveLeft() && !canMoveRight()) {
-    newTile.waitForTransition(true).then(() => {
+  if (!canMoveUpFunc() && !canMoveDownFunc() && !canMoveLeftFunc() && !canMoveRightFunc()) {
+    NEW_TILE_OBJ_TILE.waitForTransition(true).then(() => {
       $('#game-over-div').html("No moves left...<br>Game over!").css("color", "red")
     })
 
     return
   }
 
-  setupInput()
+  setupInputFunc()
 }
 
-let moveUp = () => slideTiles(grid.cellsByColumn)
+let moveUpFunc = () => slideTiles(GRID_OBJ_GRID.cellsByColumn)
 
-let moveDown = () => slideTiles(grid.cellsByColumn.map(column => [...column].reverse()))
+let moveDownFunc = () => slideTiles(GRID_OBJ_GRID.cellsByColumn.map(column => [...column].reverse()))
 
-let moveLeft = () => slideTiles(grid.cellsByRow)
+let moveLeftFunc = () => slideTiles(GRID_OBJ_GRID.cellsByRow)
 
-let moveRight = () => slideTiles(grid.cellsByRow.map(row => [...row].reverse()))
+let moveRightFunc = () => slideTiles(GRID_OBJ_GRID.cellsByRow.map(row => [...row].reverse()))
 
 function slideTiles(cells) {
   return Promise.all(
     cells.flatMap(group => {
-      const promises = []
+      const PROMISES_ARR = []
 
       for (let i = 1; i < group.length; i++) {
-        const cell = group[i]
+        const CELL_NUM = group[i]
 
-        if (cell.tile == null) {
+        if (CELL_NUM.tile == null) {
           continue
         }
 
-        let lastValidCell
+        let lastValidCellObjTile
 
         for (let j = i - 1; j >= 0; j--) {
-          const moveToCell = group[j]
+          const MOVE_TO_CELL_NUM = group[j]
 
-          if (!moveToCell.canAccept(cell.tile)) {
+          if (!MOVE_TO_CELL_NUM.canAccept(CELL_NUM.tile)) {
             break
           }
 
-          lastValidCell = moveToCell
+          lastValidCellObjTile = MOVE_TO_CELL_NUM
         }
 
-        if (lastValidCell != null) {
-          promises.push(cell.tile.waitForTransition())
+        if (lastValidCellObjTile != null) {
+          PROMISES_ARR.push(CELL_NUM.tile.waitForTransition())
 
-          if (lastValidCell.tile != null) {
-            lastValidCell.mergeTile = cell.tile
+          if (lastValidCellObjTile.tile != null) {
+            lastValidCellObjTile.mergeTile = CELL_NUM.tile
           } else {
-            lastValidCell.tile = cell.tile
+            lastValidCellObjTile.tile = CELL_NUM.tile
           }
 
-          cell.tile = null
+          CELL_NUM.tile = null
         }
       }
 
-      return promises
+      return PROMISES_ARR
     })
   )
 }
 
-let canMoveUp = () => canMove(grid.cellsByColumn)
+let canMoveUpFunc = () => canMove(GRID_OBJ_GRID.cellsByColumn)
 
-let canMoveDown = () => canMove(grid.cellsByColumn.map(column => [...column].reverse()))
+let canMoveDownFunc = () => canMove(GRID_OBJ_GRID.cellsByColumn.map(column => [...column].reverse()))
 
-let canMoveLeft = () => canMove(grid.cellsByRow)
+let canMoveLeftFunc = () => canMove(GRID_OBJ_GRID.cellsByRow)
 
-let canMoveRight = () => canMove(grid.cellsByRow.map(row => [...row].reverse()))
+let canMoveRightFunc = () => canMove(GRID_OBJ_GRID.cellsByRow.map(row => [...row].reverse()))
 
 
 function canMove(cells) {
@@ -141,23 +145,23 @@ function canMove(cells) {
         return false
       }
 
-      const movingCell = group[index - 1]
+      const MOVING_CELL_NUM = group[index - 1]
 
-      let isMovable = movingCell.canAccept(cell.tile)
-      return isMovable
+      let isMovableBool = MOVING_CELL_NUM.canAccept(cell.tile)
+      return isMovableBool
     })
   })
 }
 
-function download(filename, text) {
-  var element = document.createElement('a');
-  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-  element.setAttribute('download', filename);
+// function download(filename, text) {
+//   var elementDomA = document.createElement('a');
+//   element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+//   element.setAttribute('download', filename);
 
-  element.style.display = 'none';
-  document.body.appendChild(element);
+//   element.style.display = 'none';
+//   document.body.appendChild(element);
 
-  element.click();
+//   element.click();
 
-  document.body.removeChild(element);
-}
+//   document.body.removeChild(element);
+// }
