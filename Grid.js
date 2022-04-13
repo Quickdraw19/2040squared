@@ -1,7 +1,7 @@
 const GRID_SIZE_NUM = 4 // Number of columns and rows (square).
 const CELL_SIZE_NUM = 10 // Size of each block in 'vmin' units.
 const CELL_GAP_NUM = 1 // Size of the gap between each block in 'vmin' units.
-const DEBUG_MODE = True // Displays a tile merge log.
+const DEBUG_MODE = true // Displays a tile merge log.
 
 var totalScoreNum = 0 // Total score for the whole game.
 var bonusXNum = 1
@@ -131,7 +131,7 @@ class Cell {
   mergeTiles() {
     if (this.tile == null || this.mergeTile == null) {
       if (DEBUG_MODE) {
-
+        //$("#logging-div").append("<p>Nothing merged</p>")
       }
 
       return
@@ -151,7 +151,7 @@ class Cell {
       document.getElementById('bonus-x').innerHTML = bonusX.toLocaleString()
 
       if (DEBUG_MODE) {
-
+        $("#logging-div").append("<p>Xs merged</p>")
       }
 
       return
@@ -178,7 +178,7 @@ class Cell {
       }
 
       if (DEBUG_MODE) {
-
+        $("#logging-div").append("<p>0s merged</p>")
       }
 
       totalScoreNum = 0
@@ -200,7 +200,7 @@ class Cell {
       totalScoreNum = totalScoreNum + (lockedPointsNum * bonusXNum)
 
       if (DEBUG_MODE) {
-
+        $("#logging-div").append("<p>⍬s merged</p>")
       }
 
       lockedPointsNum = 0
@@ -222,7 +222,7 @@ class Cell {
       this.tile = null
 
       if (DEBUG_MODE) {
-
+        $("#logging-div").append("<p>⍬ and 0 cancelled</p>")
       }
 
       return
@@ -240,7 +240,7 @@ class Cell {
     this.mergeTile = null
 
     if (DEBUG_MODE) {
-
+      $("#logging-div").append("<p>Numbers merged</p>")
     }
   }
 }

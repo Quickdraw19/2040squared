@@ -69,6 +69,8 @@ body {
   color: green;
 }
 
-#instructions-div {
+#instructions-div,
+#logging-div {
   color: white;
+  clear: both;
 }
