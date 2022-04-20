@@ -130,10 +130,6 @@ class Cell {
 
   mergeTiles() {
     if (this.tile == null || this.mergeTile == null) {
-      if (DEBUG_MODE) {
-        //$("#logging-div").append("<p>Nothing merged</p>")
-      }
-
       return
     }
 
@@ -151,7 +147,7 @@ class Cell {
       document.getElementById('bonus-x').innerHTML = bonusX.toLocaleString()
 
       if (DEBUG_MODE) {
-        $("#logging-div").append("<p>Xs merged</p>")
+        $("#logging-div").prepend("Xs merged<br>")
       }
 
       return
@@ -178,7 +174,7 @@ class Cell {
       }
 
       if (DEBUG_MODE) {
-        $("#logging-div").append("<p>0s merged</p>")
+        $("#logging-div").prepend("0s merged<br>")
       }
 
       totalScoreNum = 0
@@ -200,7 +196,7 @@ class Cell {
       totalScoreNum = totalScoreNum + (lockedPointsNum * bonusXNum)
 
       if (DEBUG_MODE) {
-        $("#logging-div").append("<p>⍬s merged</p>")
+        $("#logging-div").prepend("⍬s merged<br>")
       }
 
       lockedPointsNum = 0
@@ -222,7 +218,7 @@ class Cell {
       this.tile = null
 
       if (DEBUG_MODE) {
-        $("#logging-div").append("<p>⍬ and 0 cancelled</p>")
+        $("#logging-div").prepend("⍬ and 0 cancelled<br>")
       }
 
       return
@@ -240,7 +236,7 @@ class Cell {
     this.mergeTile = null
 
     if (DEBUG_MODE) {
-      $("#logging-div").append("<p>Numbers merged</p>")
+      $("#logging-div").prepend("Numbers merged<br>")
     }
   }
 }

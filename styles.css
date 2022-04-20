@@ -70,7 +70,8 @@ body {
 }
 
 #instructions-div,
-#logging-div {
+#logging-div,
+#move-count {
   color: white;
   clear: both;
 }

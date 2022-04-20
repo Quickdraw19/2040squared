@@ -8,6 +8,8 @@ const OPTIONS_OBJ = {
   'useTiles': 1 // Tile options: 1 = number, 2 = "0" , 4 = "⍬", 8 = "X", 16 = , 32 = , and so on...
 }
 
+var MoveCount = 0
+
 const GRID_OBJ_GRID = new Grid(GAME_BOARD_DOM_DIV)
 GRID_OBJ_GRID.randomEmptyCell().tile = new Tile(GAME_BOARD_DOM_DIV, OPTIONS_OBJ)
 GRID_OBJ_GRID.randomEmptyCell().tile = new Tile(GAME_BOARD_DOM_DIV, OPTIONS_OBJ)
@@ -58,6 +60,9 @@ async function handleInput(e) {
       setupInputFunc()
       return
   }
+  
+  MoveCount += 1
+  $("#logging-div").prepend(`Move #${MoveCount}<br>`)
 
   GRID_OBJ_GRID.cells.forEach(cell => cell.mergeTiles())
 
