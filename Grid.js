@@ -228,16 +228,16 @@ class Cell {
       Everything else should be standard game tiles.
     */
     this.tile.value = this.tile.value + this.mergeTile.value
-    totalScoreNum += this.#tile.value * bonusXNum
+    totalScoreNum += this.tile.value * bonusXNum
+
+    if (DEBUG_MODE) {
+      $("#logging-div").prepend(`Numbers merged: ${this.tile.value}<br>`)
+    }
 
     document.getElementById('score-value').innerHTML = totalScoreNum.toLocaleString()
 
     this.mergeTile.remove()
     this.mergeTile = null
-
-    if (DEBUG_MODE) {
-      $("#logging-div").prepend("Numbers merged<br>")
-    }
   }
 }
 
