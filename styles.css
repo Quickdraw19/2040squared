@@ -55,6 +55,10 @@ body {
   }
 }
 
+h3 {
+  color: yellow;
+}
+
 #score-wrapper {
   font-size: 2em;
   margin-top: 50px;
@@ -74,4 +78,11 @@ body {
 #move-count {
   color: white;
   clear: both;
+}
+
+#logging-div {
+  width: 25%;
+  height: 250px;
+  background-color: rgb(61, 61, 61);
+  overflow: scroll;
 }

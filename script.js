@@ -5,14 +5,14 @@ const GAME_BOARD_DOM_DIV = document.getElementById("game-board")
 const OPTIONS_OBJ = {
   'specialTilePercentage': 0.5, // Probability that a special tile ("0", "⍬", "X") will appear; eg, 0.1 = 10%.
   'multiplierTilePercentage': 0, // Probability that an "X" will appear as a special tile; eg, 0.2 = 20% of the special tiles, or 2% of all tiles.
-  'useTiles': 1 // Tile options: 1 = number, 2 = "0" , 4 = "⍬", 8 = "X", 16 = , 32 = , and so on...
+  'useTiles': 7 // Tile options: 1 = number, 2 = "0" , 4 = "⍬", 8 = "X", 16 = , 32 = , and so on...
 }
 
 var MoveCount = 0
 
 const GRID_OBJ_GRID = new Grid(GAME_BOARD_DOM_DIV)
-GRID_OBJ_GRID.randomEmptyCell().tile = new Tile(GAME_BOARD_DOM_DIV, OPTIONS_OBJ)
-GRID_OBJ_GRID.randomEmptyCell().tile = new Tile(GAME_BOARD_DOM_DIV, OPTIONS_OBJ)
+GRID_OBJ_GRID.randomEmptyCell().tile = new Tile(GAME_BOARD_DOM_DIV, OPTIONS_OBJ, true)
+GRID_OBJ_GRID.randomEmptyCell().tile = new Tile(GAME_BOARD_DOM_DIV, OPTIONS_OBJ, true)
 
 let setupInputFunc = () => window.addEventListener("keydown", handleInput, { once: true })
 
@@ -66,7 +66,7 @@ async function handleInput(e) {
 
   GRID_OBJ_GRID.cells.forEach(cell => cell.mergeTiles())
 
-  const NEW_TILE_OBJ_TILE = new Tile(GAME_BOARD_DOM_DIV, OPTIONS_OBJ)
+  const NEW_TILE_OBJ_TILE = new Tile(GAME_BOARD_DOM_DIV, OPTIONS_OBJ, false)
   GRID_OBJ_GRID.randomEmptyCell().tile = NEW_TILE_OBJ_TILE
 
   if (!canMoveUpFunc() && !canMoveDownFunc() && !canMoveLeftFunc() && !canMoveRightFunc()) {

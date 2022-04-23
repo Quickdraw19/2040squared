@@ -8,7 +8,7 @@ export default class Tile {
   #multiplyProb
   #tileTypes
 
-  constructor(tileContainer, options) {
+  constructor(tileContainer, options, onlyNumbers) {
     this.#tileElement = document.createElement("div")
     this.#tileElement.classList.add("tile")
     tileContainer.append(this.#tileElement)
@@ -18,7 +18,7 @@ export default class Tile {
     this.#multiplyProb = options.multiplierTilePercentage
     this.#tileTypes = options.useTiles
 
-    this.value = this.getInitialValue()
+    this.value = this.getTileValue(onlyNumbers)
   }
 
   get value() {
@@ -62,12 +62,26 @@ export default class Tile {
     this.#tileElement.style.setProperty("--y", value)
   }
 
-  getInitialValue() {
-    // Check what bits are set.
-    if (this.#tileTypes & 1) { }
+  // Decided to always start with numbers.
+  getTileValue(onlyNumber) {
+    if (!onlyNumber) {
+      let dealSpecialTile = Math.random() <= this.#specialProb
 
-    if (Math.random() <= this.#specialProb) {
-      return Math.random() <= this.#multiplyProb ? 'X' : Math.random() > 0.5 ? 0 : '⍬'
+      if (dealSpecialTile) {
+        let dealMultiplier =  Math.random() <= this.#multiplyProb
+
+        if (dealMultiplier) {
+          return "X"
+        }
+
+        let useZero = this.#tileTypes & 2
+        let useNeg = this.#tileTypes & 4
+        
+        if (useZero && useNeg) return Math.random() > 0.5 ? 0 : '⍬'
+        if (useZero && !useNeg) return "0"
+        // The only thing left...
+        return "⍬"
+      }
     }
 
     return Math.random() > 0.5 ? 2 : 4
