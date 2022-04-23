@@ -2,9 +2,12 @@
 Currently working on:
 =====================
 Testing to make sure tiles are merging and scoring correctly -
-    I've seem some issues, particularly 0s work at first and then
-    they quit combining or the tile is getting locked in place
-    (as if it's not there but it is, getting orphaned perhaps).
+    I'm seeing that 0 tiles don't get removed (eventually say it with Neg tiles also) - the graphic representation.
+    It looks like the grid array doesn't think it's there because it's being
+    recognized as a empty tile. I can change the display of the phantom tile and
+    see that a new tile is behind it. Logging is below.
+
+    Update: It looks like sometimes when 0s are merged, one of them stays when they both should be removed. Yet the remaining tile stays active. I wonder if that one is eventually getting lost track of.
 
 
 To dos:
@@ -28,4 +31,3 @@ that the tile doesn't get deleted and remains in place so that other
 tiles slide on top of it.
 Reproduction:
     Haven't figured that out yet.
-
