@@ -14,70 +14,72 @@ const GRID_OBJ_GRID = new Grid(GAME_BOARD_DOM_DIV)
 GRID_OBJ_GRID.randomEmptyCell().tile = new Tile(GAME_BOARD_DOM_DIV, OPTIONS_OBJ, true)
 GRID_OBJ_GRID.randomEmptyCell().tile = new Tile(GAME_BOARD_DOM_DIV, OPTIONS_OBJ, true)
 
-let setupInputFunc = () => window.addEventListener("keydown", handleInput, { once: true })
+function setupInputFunc() {
+  window.addEventListener("keydown", handleKeydown, { once: true })
+}
 
 setupInputFunc()
 
-async function handleInput(e) {
-  switch (e.key) {
-    case "ArrowUp":
-      if (!canMoveUpFunc()) {
-        setupInputFunc()
-        return
-      }
+async function handleKeydown(e) {
+   switch (e.key) {
+      case "ArrowUp":
+         if (!canMoveUpFunc()) {
+            setupInputFunc()
+            return
+         }
 
-      await moveUpFunc()
-      break
+         await moveUpFunc()
+         break
+      case "ArrowDown":
+         if (!canMoveDownFunc()) {
+            setupInputFunc()
+            return
+         }
 
-    case "ArrowDown":
-      if (!canMoveDownFunc()) {
-        setupInputFunc()
-        return
-      }
+         await moveDownFunc()
+         break
+      case "ArrowLeft":
+         if (!canMoveLeftFunc()) {
+            setupInputFunc()
+            return
+         }
 
-      await moveDownFunc()
-      break
+         await moveLeftFunc()
+         break
+      case "ArrowRight":
+         if (!canMoveRightFunc()) {
+            setupInputFunc()
+            return
+         }
 
-    case "ArrowLeft":
-      if (!canMoveLeftFunc()) {
-        setupInputFunc()
-        return
-      }
-
-      await moveLeftFunc()
-      break
-
-    case "ArrowRight":
-      if (!canMoveRightFunc()) {
-        setupInputFunc()
-        return
-      }
-
-      await moveRightFunc()
-      break
-
-    default:
-      setupInputFunc()
-      return
-  }
+         await moveRightFunc()
+         break
+      case "i":
+         printGrid()
+         setupInputFunc()
+         return
+      default:
+         setupInputFunc()
+         return
+   }
   
-  MoveCount += 1
-  $("#logging-div").prepend(`Move #${MoveCount}<br>`)
+   MoveCount += 1
+   $("#logging-div").prepend(`Move #${MoveCount}<br>`)
 
-  GRID_OBJ_GRID.cells.forEach(cell => cell.mergeTiles())
+   GRID_OBJ_GRID.cells.forEach(cell => cell.mergeTiles())
 
-  const NEW_TILE_OBJ_TILE = new Tile(GAME_BOARD_DOM_DIV, OPTIONS_OBJ, false)
-  GRID_OBJ_GRID.randomEmptyCell().tile = NEW_TILE_OBJ_TILE
+   const NEW_TILE_OBJ_TILE = new Tile(GAME_BOARD_DOM_DIV, OPTIONS_OBJ, false)
+   GRID_OBJ_GRID.randomEmptyCell().tile = NEW_TILE_OBJ_TILE
 
-  if (!canMoveUpFunc() && !canMoveDownFunc() && !canMoveLeftFunc() && !canMoveRightFunc()) {
-    NEW_TILE_OBJ_TILE.waitForTransition(true).then(() => {
-      $('#game-over-div').html("No moves left...<br>Game over!").css("color", "red")
-    })
+   if (!canMoveUpFunc() && !canMoveDownFunc() && !canMoveLeftFunc() && !canMoveRightFunc()) {
+      NEW_TILE_OBJ_TILE.waitForTransition(true).then(() => {
+         $('#game-over-div').html("No moves left...<br>Game over!").css("color", "red")
+      })
 
-    return
-  }
+      return
+   }
 
-  setupInputFunc()
+   setupInputFunc()
 }
 
 let moveUpFunc = () => slideTiles(GRID_OBJ_GRID.cellsByColumn)
@@ -156,6 +158,13 @@ function canMove(cells) {
       return isMovableBool
     })
   })
+}
+
+function printGrid() {
+   //console.log(GRID_OBJ_GRID.cellsByRow)
+   //GRID_OBJ_GRID.cells.forEach(cell => console.log(cell))
+   GRID_OBJ_GRID.cellsByRow.forEach(cell => console.log(cell))
+   
 }
 
 // function download(filename, text) {
