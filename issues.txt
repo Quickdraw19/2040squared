@@ -1,13 +1,17 @@
 ⍬
 Currently working on:
 =====================
-Testing to make sure tiles are merging and scoring correctly -
-    I'm seeing that 0 tiles don't get removed (eventually say it with Neg tiles also) - the graphic representation.
-    It looks like the grid array doesn't think it's there because it's being
-    recognized as a empty tile. I can change the display of the phantom tile and
-    see that a new tile is behind it. Logging is below.
+   script.js:163 - Working on a function to output the contents of the Grid array.
 
-    Update: It looks like sometimes when 0s are merged, one of them stays when they both should be removed. Yet the remaining tile stays active. I wonder if that one is eventually getting lost track of.
+    Testing to make sure tiles are merging and scoring correctly - I'm seeing that 0 tiles don't 
+    get removed (eventually say it with Neg tiles also) - the graphic representation.
+
+    It looks like the grid array doesn't think it's there because it's being recognized as an 
+    empty tile. I can change the display of the phantom tile and see that a new tile is behind 
+    it. Logging is below.
+
+    Update: It looks like it happens when 3 or more special tiles are merged. It still shows
+    on the grid, but it's not in the internal grid.
 
 
 To dos:
