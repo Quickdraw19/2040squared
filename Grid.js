@@ -8,248 +8,248 @@ var bonusXNum = 1
 var lockedPointsNum = 0
 
 export default class Grid {
-  #cells // ? Array storing the cell info for the whole grid.
+   #cells // ? Array storing the cell info for the whole grid.
 
-  // @gridElement: HTML element (ie. <div>) where the grid will be placed.
-  constructor(gridElement) {
-    // Set up the grid area.
-    gridElement.style.setProperty("--grid-size", GRID_SIZE_NUM)
-    gridElement.style.setProperty("--cell-size", `${CELL_SIZE_NUM}vmin`)
-    gridElement.style.setProperty("--cell-gap", `${CELL_GAP_NUM}vmin`)
+   // @gridElement: HTML element (ie. <div>) where the grid will be placed.
+   constructor(gridElement) {
+      // Set up the grid area.
+      gridElement.style.setProperty("--grid-size", GRID_SIZE_NUM)
+      gridElement.style.setProperty("--cell-size", `${CELL_SIZE_NUM}vmin`)
+      gridElement.style.setProperty("--cell-gap", `${CELL_GAP_NUM}vmin`)
 
-    // Set up the block within the grid.
-    // map() runs a given function for each element of an array.
-    this.#cells = createCellElements(gridElement).map(
-      function (cellElement, index) { // Current element in the array, array index of the element.
-        let blockObjCell = new Cell(
-          cellElement,
-          index % GRID_SIZE_NUM,
-          Math.floor(index / GRID_SIZE_NUM)
-        )
+      // Set up the block within the grid.
+      // map() runs a given function for each element of an array.
+      this.#cells = createCellElements(gridElement).map(
+         function (cellElement, index) { // Current element in the array, array index of the element.
+            let blockObjCell = new Cell(
+               cellElement,
+               index % GRID_SIZE_NUM,
+               Math.floor(index / GRID_SIZE_NUM)
+               )
 
-        return blockObjCell
+            return blockObjCell
       })
-  }
+   }
 
-  get cells() {
-    return this.#cells
-  }
+   get cells() {
+      return this.#cells
+   }
 
-  get cellsByRow() {
-    return this.#cells.reduce((cellGrid, cell) => {
-      cellGrid[cell.y] = cellGrid[cell.y] || []
-      cellGrid[cell.y][cell.x] = cell
-      return cellGrid
-    }, [])
-  }
+   get cellsByRow() {
+      return this.#cells.reduce((cellGrid, cell) => {
+         cellGrid[cell.y] = cellGrid[cell.y] || []
+         cellGrid[cell.y][cell.x] = cell
+         return cellGrid
+      }, [])
+   }
 
-  get cellsByColumn() {
-    return this.#cells.reduce((cellGrid, cell) => {
-      cellGrid[cell.x] = cellGrid[cell.x] || []
-      cellGrid[cell.x][cell.y] = cell
-      return cellGrid
-    }, [])
-  }
+   get cellsByColumn() {
+      return this.#cells.reduce((cellGrid, cell) => {
+         cellGrid[cell.x] = cellGrid[cell.x] || []
+         cellGrid[cell.x][cell.y] = cell
+         return cellGrid
+      }, [])
+   }
 
-  get #emptyCells() {
-    return this.#cells.filter(cell => cell.tile == null)
-  }
+   get #emptyCells() {
+      return this.#cells.filter(cell => cell.tile == null)
+   }
 
-  randomEmptyCell() {
-    const RANDOM_INDEX_NUM = Math.floor(Math.random() * this.#emptyCells.length)
-    return this.#emptyCells[RANDOM_INDEX_NUM]
-  }
+   randomEmptyCell() {
+      const RANDOM_INDEX_NUM = Math.floor(Math.random() * this.#emptyCells.length)
+      return this.#emptyCells[RANDOM_INDEX_NUM]
+   }
 }
 
 class Cell {
-  #cellElement
-  #x
-  #y
-  #tile
-  #mergeTile
+   #cellElement
+   #x
+   #y
+   #tile
+   #mergeTile
 
-  constructor(cellElement, x, y) {
-    this.#cellElement = cellElement
-    this.#x = x
-    this.#y = y
-  }
+   constructor(cellElement, x, y) {
+      this.#cellElement = cellElement
+      this.#x = x
+      this.#y = y
+   }
 
-  get x() {
-    return this.#x
-  }
+   get x() {
+      return this.#x
+   }
 
-  get y() {
-    return this.#y
-  }
+   get y() {
+      return this.#y
+   }
 
-  get tile() {
-    return this.#tile
-  }
+   get tile() {
+      return this.#tile
+   }
 
-  set tile(value) {
-    this.#tile = value
+   set tile(value) {
+      this.#tile = value
 
-    if (value == null) {
-      return
-    }
+      if (value == null) {
+         return
+      }
 
-    this.#tile.x = this.#x
-    this.#tile.y = this.#y
-  }
+      this.#tile.x = this.#x
+      this.#tile.y = this.#y
+   }
 
-  get mergeTile() {
-    return this.#mergeTile
-  }
+   get mergeTile() {
+      return this.#mergeTile
+   }
 
-  set mergeTile(value) {
-    this.#mergeTile = value
+   set mergeTile(value) {
+      this.#mergeTile = value
 
-    if (value == null) {
-      return
-    }
+      if (value == null) {
+         return
+      }
 
-    this.#mergeTile.x = this.#x
-    this.#mergeTile.y = this.#y
-  }
+      this.#mergeTile.x = this.#x
+      this.#mergeTile.y = this.#y
+   }
 
-  canAccept(tile) {
-    if (this.tile == null) {
-      return true
-    }
+   canAccept(tile) {
+      if (this.tile == null) {
+         return true
+      }
 
-    if (this.mergeTile == null && this.tile.value === tile.value) {
-      return true
-    }
+      if (this.mergeTile == null && this.tile.value === tile.value) {
+         return true
+      }
 
-    if ((this.tile.value == 0 || tile.value == 0) && (tile.value == '⍬' || this.tile.value == '⍬')) {
-      return true
-    }
+      if ((this.tile.value == 0 || tile.value == 0) && (tile.value == '⍬' || this.tile.value == '⍬')) {
+         return true
+      }
 
-    return false
-  }
+      return false
+   }
 
-  mergeTiles() {
-    if (this.tile == null || this.mergeTile == null) {
-      return
-    }
+   mergeTiles() {
+      if (this.tile == null || this.mergeTile == null) {
+         return
+      }
 
-    /*
-    When two Xs are merged:
+      /*
+      When two Xs are merged:
       Increase bonus multiplier (X) by 1.
       All score are multiplied by this factor, including recovered locked points.
-    */
-    if (this.tile.value == 'X' && this.mergeTile.value == 'X') {
-      this.mergeTile.remove()
-      this.mergeTile = null
-      this.tile.remove()
-      this.tile = null
-      bonusX = bonusX + 1
-      document.getElementById('bonus-x').innerHTML = bonusX.toLocaleString()
+      */
+      if (this.tile.value == 'X' && this.mergeTile.value == 'X') {
+         this.mergeTile.remove()
+         this.mergeTile = null
+         this.tile.remove()
+         this.tile = null
+         bonusX = bonusX + 1
+         document.getElementById('bonus-x').innerHTML = bonusX.toLocaleString()
 
-      if (DEBUG_MODE) {
-        $("#logging-div").prepend("Xs merged<br>")
+         if (DEBUG_MODE) {
+            $("#logging-div").prepend("Xs merged<br>")
+         }
+
+         return
       }
 
-      return
-    }
-
-    /* 
+      /* 
       When two 0s are merged:
-        Zero out the total score and move it to "locked points".
-        Points can be recovered from merging two ⍬s.
-        If two 0s are merged again before locked points are collected, both scores are wiped.
-    */
-    if (this.tile.value == 0 && this.mergeTile.value == 0) {
-      this.mergeTile.remove()
-      this.mergeTile = null
-      this.tile.remove()
-      this.tile = null
+      Zero out the total score and move it to "locked points".
+      Points can be recovered from merging two ⍬s.
+      If two 0s are merged again before locked points are collected, both scores are wiped.
+      */
+      if (this.tile.value == 0 && this.mergeTile.value == 0) {
+         this.mergeTile.remove()
+         this.mergeTile = null
+         this.tile.remove()
+         this.tile = null
 
-      // If there are no locked points, then lock the current score.
-      // If there are already locked points, then wipe out the points.
-      if (lockedPointsNum == 0) {
-        lockedPointsNum = lockedPointsNum + totalScoreNum
-      } else {
-        lockedPointsNum = 0
+         // If there are no locked points, then lock the current score.
+         // If there are already locked points, then wipe out the points.
+         if (lockedPointsNum == 0) {
+            lockedPointsNum = lockedPointsNum + totalScoreNum
+         } else {
+            lockedPointsNum = 0
+         }
+
+         if (DEBUG_MODE) {
+            $("#logging-div").prepend("0s merged<br>")
+         }
+
+         totalScoreNum = 0
+         document.getElementById('score-value').innerHTML = "0"
+         document.getElementById('locked-points').innerHTML = lockedPointsNum.toLocaleString()
+         return
       }
 
-      if (DEBUG_MODE) {
-        $("#logging-div").prepend("0s merged<br>")
-      }
-
-      totalScoreNum = 0
-      document.getElementById('score-value').innerHTML = "0"
-      document.getElementById('locked-points').innerHTML = lockedPointsNum.toLocaleString()
-      return
-    }
-
-    /*
+      /*
       When two ⍬s are merged:
-        Recovers locked points and is added back to total score times the X factor.
-    */
-    if (this.tile.value == '⍬' && this.mergeTile.value == '⍬') {
-      this.mergeTile.remove()
-      this.mergeTile = null
-      this.tile.remove()
-      this.tile = null
+      Recovers locked points and is added back to total score times the X factor.
+      */
+      if (this.tile.value == '⍬' && this.mergeTile.value == '⍬') {
+         this.mergeTile.remove()
+         this.mergeTile = null
+         this.tile.remove()
+         this.tile = null
 
-      totalScoreNum = totalScoreNum + (lockedPointsNum * bonusXNum)
+         totalScoreNum = totalScoreNum + (lockedPointsNum * bonusXNum)
 
-      if (DEBUG_MODE) {
-        $("#logging-div").prepend("⍬s merged<br>")
+         if (DEBUG_MODE) {
+            $("#logging-div").prepend("⍬s merged<br>")
+         }
+
+         lockedPointsNum = 0
+
+         document.getElementById('score-value').innerHTML = totalScoreNum.toLocaleString()
+         document.getElementById('locked-points').innerHTML = "0"
+         document.getElementById('bonus-x').innerHTML = "1"
+         return
       }
 
-      lockedPointsNum = 0
+      /*
+      When ⍬ and 0 are merged:
+      Cancels each other out.
+      */
+      if ((this.tile.value == 0 && this.mergeTile.value == '⍬') || (this.tile.value == '⍬' && this.mergeTile.value == 0)) {
+         this.mergeTile.remove()
+         this.mergeTile = null
+         this.tile.remove()
+         this.tile = null
+
+         if (DEBUG_MODE) {
+            $("#logging-div").prepend("⍬ and 0 cancelled<br>")
+         }
+
+         return
+      }
+
+      /*
+      Everything else should be standard game tiles.
+      */
+      this.tile.value = this.tile.value + this.mergeTile.value
+      totalScoreNum += this.tile.value * bonusXNum
+
+      if (DEBUG_MODE) {
+         $("#logging-div").prepend(`Numbers merged: ${this.tile.value}<br>`)
+      }
 
       document.getElementById('score-value').innerHTML = totalScoreNum.toLocaleString()
-      document.getElementById('locked-points').innerHTML = "0"
-      document.getElementById('bonus-x').innerHTML = "1"
-      return
-    }
 
-    /*
-      When ⍬ and 0 are merged:
-        Cancels each other out.
-    */
-    if ((this.tile.value == 0 && this.mergeTile.value == '⍬') || (this.tile.value == '⍬' && this.mergeTile.value == 0)) {
       this.mergeTile.remove()
       this.mergeTile = null
-      this.tile.remove()
-      this.tile = null
-
-      if (DEBUG_MODE) {
-        $("#logging-div").prepend("⍬ and 0 cancelled<br>")
-      }
-
-      return
-    }
-
-    /*
-      Everything else should be standard game tiles.
-    */
-    this.tile.value = this.tile.value + this.mergeTile.value
-    totalScoreNum += this.tile.value * bonusXNum
-
-    if (DEBUG_MODE) {
-      $("#logging-div").prepend(`Numbers merged: ${this.tile.value}<br>`)
-    }
-
-    document.getElementById('score-value').innerHTML = totalScoreNum.toLocaleString()
-
-    this.mergeTile.remove()
-    this.mergeTile = null
-  }
+   }
 }
 
 function createCellElements(gridElement) {
-  const CELLS_ARR = []
+const CELLS_ARR = []
 
-  for (let i = 0; i < GRID_SIZE_NUM * GRID_SIZE_NUM; i++) {
-    const CELL_DOM_DIV = document.createElement("div")
-    CELL_DOM_DIV.classList.add("cell")
-    CELLS_ARR.push(CELL_DOM_DIV)
-    gridElement.append(CELL_DOM_DIV)
-  }
+   for (let i = 0; i < GRID_SIZE_NUM * GRID_SIZE_NUM; i++) {
+      const CELL_DOM_DIV = document.createElement("div")
+      CELL_DOM_DIV.classList.add("cell")
+      CELLS_ARR.push(CELL_DOM_DIV)
+      gridElement.append(CELL_DOM_DIV)
+   }
 
-  return CELLS_ARR
+   return CELLS_ARR
 }

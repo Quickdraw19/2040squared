@@ -3,9 +3,9 @@ import Tile from "./Tile.js"
 
 const GAME_BOARD_DOM_DIV = document.getElementById("game-board")
 const OPTIONS_OBJ = {
-  'specialTilePercentage': 0.5, // Probability that a special tile ("0", "⍬", "X") will appear; eg, 0.1 = 10%.
-  'multiplierTilePercentage': 0, // Probability that an "X" will appear as a special tile; eg, 0.2 = 20% of the special tiles, or 2% of all tiles.
-  'useTiles': 7 // Tile options: 1 = number, 2 = "0" , 4 = "⍬", 8 = "X", 16 = , 32 = , and so on...
+   'specialTilePercentage': 0.5, // Probability that a special tile ("0", "⍬", "X") will appear; eg, 0.1 = 10%.
+   'multiplierTilePercentage': 0, // Probability that an "X" will appear as a special tile; eg, 0.2 = 20% of the special tiles, or 2% of all tiles.
+   'useTiles': 7 // Tile options: 1 = number, 2 = "0" , 4 = "⍬", 8 = "X", 16 = , 32 = , and so on...
 }
 
 var MoveCount = 0
@@ -15,7 +15,7 @@ GRID_OBJ_GRID.randomEmptyCell().tile = new Tile(GAME_BOARD_DOM_DIV, OPTIONS_OBJ,
 GRID_OBJ_GRID.randomEmptyCell().tile = new Tile(GAME_BOARD_DOM_DIV, OPTIONS_OBJ, true)
 
 function setupInputFunc() {
-  window.addEventListener("keydown", handleKeydown, { once: true })
+   window.addEventListener("keydown", handleKeydown, { once: true })
 }
 
 setupInputFunc()
@@ -27,42 +27,43 @@ async function handleKeydown(e) {
             setupInputFunc()
             return
          }
-
          await moveUpFunc()
          break
+
       case "ArrowDown":
          if (!canMoveDownFunc()) {
             setupInputFunc()
             return
          }
-
          await moveDownFunc()
          break
+
       case "ArrowLeft":
          if (!canMoveLeftFunc()) {
             setupInputFunc()
             return
          }
-
          await moveLeftFunc()
          break
+
       case "ArrowRight":
          if (!canMoveRightFunc()) {
             setupInputFunc()
             return
          }
-
          await moveRightFunc()
          break
+
       case "i":
          printGrid()
          setupInputFunc()
          return
-      default:
-         setupInputFunc()
-         return
+
+         default:
+            setupInputFunc()
+            return
    }
-  
+
    MoveCount += 1
    $("#logging-div").prepend(`Move #${MoveCount}<br>`)
 
@@ -91,45 +92,45 @@ let moveLeftFunc = () => slideTiles(GRID_OBJ_GRID.cellsByRow)
 let moveRightFunc = () => slideTiles(GRID_OBJ_GRID.cellsByRow.map(row => [...row].reverse()))
 
 function slideTiles(cells) {
-  return Promise.all(
-    cells.flatMap(group => {
-      const PROMISES_ARR = []
+   return Promise.all(
+      cells.flatMap(group => {
+         const PROMISES_ARR = []
 
-      for (let i = 1; i < group.length; i++) {
-        const CELL_NUM = group[i]
+         for (let i = 1; i < group.length; i++) {
+            const CELL_NUM = group[i]
 
-        if (CELL_NUM.tile == null) {
-          continue
-        }
+            if (CELL_NUM.tile == null) {
+               continue
+            }
 
-        let lastValidCellObjTile
+            let lastValidCellObjTile
 
-        for (let j = i - 1; j >= 0; j--) {
-          const MOVE_TO_CELL_NUM = group[j]
+            for (let j = i - 1; j >= 0; j--) {
+               const MOVE_TO_CELL_NUM = group[j]
 
-          if (!MOVE_TO_CELL_NUM.canAccept(CELL_NUM.tile)) {
-            break
-          }
+               if (!MOVE_TO_CELL_NUM.canAccept(CELL_NUM.tile)) {
+                  break
+               }
 
-          lastValidCellObjTile = MOVE_TO_CELL_NUM
-        }
+               lastValidCellObjTile = MOVE_TO_CELL_NUM
+            }
 
-        if (lastValidCellObjTile != null) {
-          PROMISES_ARR.push(CELL_NUM.tile.waitForTransition())
+            if (lastValidCellObjTile != null) {
+               PROMISES_ARR.push(CELL_NUM.tile.waitForTransition())
 
-          if (lastValidCellObjTile.tile != null) {
-            lastValidCellObjTile.mergeTile = CELL_NUM.tile
-          } else {
-            lastValidCellObjTile.tile = CELL_NUM.tile
-          }
+               if (lastValidCellObjTile.tile != null) {
+                  lastValidCellObjTile.mergeTile = CELL_NUM.tile
+               } else {
+                  lastValidCellObjTile.tile = CELL_NUM.tile
+               }
 
-          CELL_NUM.tile = null
-        }
-      }
+               CELL_NUM.tile = null
+            }
+         }
 
-      return PROMISES_ARR
-    })
-  )
+         return PROMISES_ARR
+      })
+   )
 }
 
 let canMoveUpFunc = () => canMove(GRID_OBJ_GRID.cellsByColumn)
@@ -142,29 +143,29 @@ let canMoveRightFunc = () => canMove(GRID_OBJ_GRID.cellsByRow.map(row => [...row
 
 
 function canMove(cells) {
-  return cells.some(group => {
-    return group.some((cell, index) => {
-      if (index === 0) {
-        return false
-      }
+   return cells.some(group => {
+      return group.some((cell, index) => {
+         if (index === 0) {
+            return false
+         }
 
-      if (cell.tile == null) {
-        return false
-      }
+         if (cell.tile == null) {
+            return false
+         }
 
-      const MOVING_CELL_NUM = group[index - 1]
+         const MOVING_CELL_NUM = group[index - 1]
 
-      let isMovableBool = MOVING_CELL_NUM.canAccept(cell.tile)
-      return isMovableBool
-    })
-  })
+         let isMovableBool = MOVING_CELL_NUM.canAccept(cell.tile)
+         return isMovableBool
+      })
+   })
 }
 
 function printGrid() {
    //console.log(GRID_OBJ_GRID.cellsByRow)
    //GRID_OBJ_GRID.cells.forEach(cell => console.log(cell))
    GRID_OBJ_GRID.cellsByRow.forEach(cell => console.log(cell))
-   
+
 }
 
 // function download(filename, text) {

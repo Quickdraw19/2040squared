@@ -1,88 +1,88 @@
 *,
 *::before,
 *::after {
-  font-family: Arial;
+font-family: Arial;
 }
 
 body {
-  background-color: #333;
+background-color: #333;
 }
 
 .game-section {
-  float: left;
-  padding: var(--cell-gap);
+float: left;
+padding: var(--cell-gap);
 }
 
 #game-board {
-  position: relative;
-  display: inline-grid;
-  font-size: 2em;
-  background-color: #CCC;
-  margin: 50px;
-  grid-template-columns: repeat(var(--grid-size), var(--cell-size));
-  grid-template-rows: repeat(var(--grid-size), var(--cell-size));
-  gap: var(--cell-gap);
-  border-radius: 1vmin;
+position: relative;
+display: inline-grid;
+font-size: 2em;
+background-color: #CCC;
+margin: 50px;
+grid-template-columns: repeat(var(--grid-size), var(--cell-size));
+grid-template-rows: repeat(var(--grid-size), var(--cell-size));
+gap: var(--cell-gap);
+border-radius: 1vmin;
 }
 
 .cell {
-  background-color: #AAA;
-  border-radius: 1vmin;
+background-color: #AAA;
+border-radius: 1vmin;
 }
 
 .tile {
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: red;
-  width: var(--cell-size);
-  height: var(--cell-size);
-  border-radius: 1vmin;
-  top: calc(var(--y) * (var(--cell-size) + var(--cell-gap)) + var(--cell-gap));
-  left: calc(var(--x) * (var(--cell-size) + var(--cell-gap)) + var(--cell-gap));
-  font-weight: bold;
-  background-color: hsl(200, 100%, var(--background-lightness));
-  color: hsl(200, 25%, var(--text-lightness));
-  animation: show 400ms ease-in-out;
-  transition: 200ms ease-in-out;
+position: absolute;
+display: flex;
+justify-content: center;
+align-items: center;
+background-color: red;
+width: var(--cell-size);
+height: var(--cell-size);
+border-radius: 1vmin;
+top: calc(var(--y) * (var(--cell-size) + var(--cell-gap)) + var(--cell-gap));
+left: calc(var(--x) * (var(--cell-size) + var(--cell-gap)) + var(--cell-gap));
+font-weight: bold;
+background-color: hsl(200, 100%, var(--background-lightness));
+color: hsl(200, 25%, var(--text-lightness));
+animation: show 400ms ease-in-out;
+transition: 200ms ease-in-out;
 }
 
 @keyframes show {
-  0% {
-    opacity: .5;
-    transform: scale(1);
-  }
+0% {
+opacity: .5;
+transform: scale(1);
+}
 }
 
 h3 {
-  color: yellow;
+   color: yellow;
 }
 
 #score-wrapper {
-  font-size: 2em;
-  margin-top: 50px;
+   font-size: 2em;
+   margin-top: 50px;
 }
 
 .score-display {
-  color: #CCC;
-  margin: 20px;
+   color: #CCC;
+   margin: 20px;
 }
 
 #game-over-div {
-  color: green;
+   color: green;
 }
 
 #instructions-div,
 #logging-div,
 #move-count {
-  color: white;
-  clear: both;
+   color: white;
+   clear: both;
 }
 
 #logging-div {
-  width: 25%;
-  height: 250px;
-  background-color: rgb(61, 61, 61);
-  overflow: scroll;
+   width: 25%;
+   height: 250px;
+   background-color: rgb(61, 61, 61);
+   overflow: scroll;
 }

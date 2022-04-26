@@ -1,49 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>2040<sup>2</sup></title>
+      <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+      <link rel="stylesheet" href="styles.css">
+      <script src="script.js" type="module"></script>
+      <script src="../Libraries/jquery/jquery-3.6.0.min.js"></script>
+   </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2040<sup>2</sup></title>
-  <link rel="icon" type="image/x-icon" href="images/favicon.ico">
-  <link rel="stylesheet" href="styles.css">
-  <script src="script.js" type="module"></script>
-  <script src="../Libraries/jquery/jquery-3.6.0.min.js"></script>
-</head>
+   <body>
+      <!-- <div id="move-count">
+      Move count: <span id="move-count-num">0</span>
+      </div> -->
 
-<body>
-  <!-- <div id="move-count">
-    Move count: <span id="move-count-num">0</span>
-  </div> -->
+      <div id="game-board" class="game-section"></div>
 
-  <div id="game-board" class="game-section"></div>
+      <div id="score-wrapper" class="game-section">
+         <div id="score-div" class="score-display">
+            Score: <span id="score-value">0</span>
+         </div>
 
-  <div id="score-wrapper" class="game-section">
-    <div id="score-div" class="score-display">
-      Score: <span id="score-value">0</span>
-    </div>
+         <div id="multiplier-div" class="score-display">
+            Bonus X: <span id="bonus-x">1</span>
+         </div>
 
-    <div id="multiplier-div" class="score-display">
-      Bonus X: <span id="bonus-x">1</span>
-    </div>
+         <div id="locked-div" class="score-display">
+            Locked Points: <span id="locked-points">0</span>
+         </div>
 
-    <div id="locked-div" class="score-display">
-      Locked Points: <span id="locked-points">0</span>
-    </div>
+         <div id="game-over-div">
+            Game In Progress
+         </div>
+      </div>
 
-    <div id="game-over-div">
-      Game In Progress
-    </div>
-  </div>
+      <div id="instructions-div">
+         INSTRUCTIONS:
+      </div>
 
-  <div id="instructions-div">
-    INSTRUCTIONS:
-  </div>
-  <h3>Logging:</h3>
-  <div id="logging-div">
-    
-  </div>
-</body>
-
+      <h3>Logging:</h3>
+      <div id="logging-div"></div>
+   </body>
 </html>

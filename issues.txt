@@ -1,17 +1,21 @@
 ⍬
 Currently working on:
 =====================
-   script.js:163 - Working on a function to output the contents of the Grid array.
+   Testing to make sure tiles are merging and scoring correctly - I'm seeing that 0 tiles don't 
+   get removed (eventually say it with Neg tiles also) - the graphic representation.
 
-    Testing to make sure tiles are merging and scoring correctly - I'm seeing that 0 tiles don't 
-    get removed (eventually say it with Neg tiles also) - the graphic representation.
+   Update: It looks like the grid array doesn't think it's there because it's being recognized as an 
+   empty tile. I can change the display of the phantom tile and see that a new tile is behind 
+   it. Logging is below.
 
-    It looks like the grid array doesn't think it's there because it's being recognized as an 
-    empty tile. I can change the display of the phantom tile and see that a new tile is behind 
-    it. Logging is below.
+      Update 2: It looks like it happens when 3 or more special tiles are merged. It still shows
+      on the grid, but it's not in the internal grid.
 
-    Update: It looks like it happens when 3 or more special tiles are merged. It still shows
-    on the grid, but it's not in the internal grid.
+         Update 3: It's definatley when at least 3 are being merged. Need to check on the order
+         of merging precedence. It looks like the new random tile is always be inserted where
+         the special tile disappered when the problem happens.
+   Next:
+      Need to figure out what is going on when the 3 tiles merge.
 
 
 To dos:
