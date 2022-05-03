@@ -16,8 +16,19 @@ Currently working on:
          the special tile disappered when the problem happens.
    Next:
       Need to figure out what is going on when the 3 tiles merge.
+Sequence:
+R-B-B -> (Red pushed toward blues) R and 1 B gets removed. The other B gets ghosted. (x3 repeated)
+B-B-R -> (Blues pushed into the red) Same as R-B-B. Indicating it doesn't matter what direction they are being pushed. (x3)
+B-R-R -> (Blue pushed into reds) Same as above except the 2nd red gets ghosted. x1
 
+E-B-R-B -> (Free space on left, pushing away from free space) Nothing ghosted but blue and right was removed but not 
+         the red. (x1)
+R-E-B-R -> Worked correctly? The end blue and red were removed. The other red remaning in the 3rd postition. x1
+R-E-B-B <- Slide all the way to the 1st postion. Red and a blue canceled out. Other blue got ghosted in 1st position. x1
 
+R-R-B-R -> All disappeared (x1 repeated)
+R-R-R-B <- (Blue pushed into reds) Blue and a red where removed. Red ghosted on first spot and a red remaining in 
+         second spot (x1)
 To dos:
 =======
 Add a start new game button.
