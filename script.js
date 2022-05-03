@@ -1,78 +1,97 @@
 import Grid from "./Grid.js"
-import Tile from "./Tile.js"
+import Block from "./Block.js"
 
+// Gameboard setup...
 const GAME_BOARD_DOM_DIV = document.getElementById("game-board")
+const GRID_OBJ_GRID      = new Grid(GAME_BOARD_DOM_DIV)
+
+// Game options...
 const OPTIONS_OBJ = {
-   'specialTilePercentage': 0.5, // Probability that a special tile ("0", "⍬", "X") will appear; eg, 0.1 = 10%.
-   'multiplierTilePercentage': 0, // Probability that an "X" will appear as a special tile; eg, 0.2 = 20% of the special tiles, or 2% of all tiles.
-   'useTiles': 7 // Tile options: 1 = number, 2 = "0" , 4 = "⍬", 8 = "X", 16 = , 32 = , and so on...
+   'specialBlockPercentage': 0.5, // Probability that a special block ("0", "⍬", "X") will appear; eg, 0.1 = 10%.
+   'multiplierBlockPercentage': 0, // Probability that an "X" will appear as a special block; eg, 0.2 = 20% of the special blocks, or 2% of all blocks.
+   'useblocks': 7 // block options: 1 = number, 2 = "0" , 4 = "⍬", 8 = "X", 16 = , 32 = , and so on...
 }
 
+// Intialize the game board with 2 numberic blocks....
+GRID_OBJ_GRID.randomEmptyCell().block = new Block(GAME_BOARD_DOM_DIV, OPTIONS_OBJ, true)
+GRID_OBJ_GRID.randomEmptyCell().block = new Block(GAME_BOARD_DOM_DIV, OPTIONS_OBJ, true)
+
+// To track how many moves the players have made...
 var MoveCount = 0
 
-const GRID_OBJ_GRID = new Grid(GAME_BOARD_DOM_DIV)
-GRID_OBJ_GRID.randomEmptyCell().tile = new Tile(GAME_BOARD_DOM_DIV, OPTIONS_OBJ, true)
-GRID_OBJ_GRID.randomEmptyCell().tile = new Tile(GAME_BOARD_DOM_DIV, OPTIONS_OBJ, true)
-
-function setupInputFunc() {
-   window.addEventListener("keydown", handleKeydown, { once: true })
+//
+function inputHandler() {
+   window.addEventListener(
+      "keydown", 
+      handleKeydown, 
+      { 
+         once: true 
+      })
 }
 
-setupInputFunc()
+inputHandler()
 
+//@QUES - Why does inputHandler need to keep being call again?
 async function handleKeydown(e) {
    switch (e.key) {
       case "ArrowUp":
-         if (!canMoveUpFunc()) {
-            setupInputFunc()
+         if (!canMoveUp()) {
+            inputHandler()
             return
          }
-         await moveUpFunc()
+         //await 
+         moveUpFunc()
          break
 
       case "ArrowDown":
-         if (!canMoveDownFunc()) {
-            setupInputFunc()
+         if (!canMoveDown()) {
+            inputHandler()
             return
          }
-         await moveDownFunc()
+         //await 
+         moveDownFunc()
          break
 
       case "ArrowLeft":
-         if (!canMoveLeftFunc()) {
-            setupInputFunc()
+         if (!canMoveLeft()) {
+            inputHandler()
             return
          }
-         await moveLeftFunc()
+         //await 
+         moveLeftFunc()
          break
 
       case "ArrowRight":
-         if (!canMoveRightFunc()) {
-            setupInputFunc()
+         if (!canMoveRight()) {
+            inputHandler()
             return
          }
-         await moveRightFunc()
+         //await 
+         moveRightFunc()
          break
 
       case "i":
          printGrid()
-         setupInputFunc()
+         inputHandler()
          return
 
          default:
-            setupInputFunc()
+            inputHandler()
             return
    }
 
    MoveCount += 1
    $("#logging-div").prepend(`Move #${MoveCount}<br>`)
 
-   GRID_OBJ_GRID.cells.forEach(cell => cell.mergeTiles())
+   // Execute the block moves...
+   GRID_OBJ_GRID.cells.forEach(cell => cell.mergeBlocks())
 
-   const NEW_TILE_OBJ_TILE = new Tile(GAME_BOARD_DOM_DIV, OPTIONS_OBJ, false)
-   GRID_OBJ_GRID.randomEmptyCell().tile = NEW_TILE_OBJ_TILE
+   // Create a new block to place on the game board after successful move and add it on a random grid location...
+   const NEW_TILE_OBJ_TILE = new Block(GAME_BOARD_DOM_DIV, OPTIONS_OBJ, false)
+   GRID_OBJ_GRID.randomEmptyCell().block = NEW_TILE_OBJ_TILE
 
-   if (!canMoveUpFunc() && !canMoveDownFunc() && !canMoveLeftFunc() && !canMoveRightFunc()) {
+   // After the new 
+   if (!canMoveUp() && !canMoveDown() && !canMoveLeft() && !canMoveRight()) {
       NEW_TILE_OBJ_TILE.waitForTransition(true).then(() => {
          $('#game-over-div').html("No moves left...<br>Game over!").css("color", "red")
       })
@@ -80,18 +99,26 @@ async function handleKeydown(e) {
       return
    }
 
-   setupInputFunc()
+   inputHandler()
 }
 
-let moveUpFunc = () => slideTiles(GRID_OBJ_GRID.cellsByColumn)
+function moveUpFunc() {
+   slideBlocks(GRID_OBJ_GRID.cellsByColumn)
+}
 
-let moveDownFunc = () => slideTiles(GRID_OBJ_GRID.cellsByColumn.map(column => [...column].reverse()))
+function moveDownFunc() {
+   slideBlocks(GRID_OBJ_GRID.cellsByColumn.map(column => [...column].reverse()))
+}
 
-let moveLeftFunc = () => slideTiles(GRID_OBJ_GRID.cellsByRow)
+function moveLeftFunc() {
+   slideBlocks(GRID_OBJ_GRID.cellsByRow)
+}
 
-let moveRightFunc = () => slideTiles(GRID_OBJ_GRID.cellsByRow.map(row => [...row].reverse()))
+function moveRightFunc() {
+   slideBlocks(GRID_OBJ_GRID.cellsByRow.map(row => [...row].reverse()))
+}
 
-function slideTiles(cells) {
+function slideBlocks(cells) {
    return Promise.all(
       cells.flatMap(group => {
          const PROMISES_ARR = []
@@ -99,32 +126,32 @@ function slideTiles(cells) {
          for (let i = 1; i < group.length; i++) {
             const CELL_NUM = group[i]
 
-            if (CELL_NUM.tile == null) {
+            if (CELL_NUM.block == null) {
                continue
             }
 
-            let lastValidCellObjTile
+            let lastValidCellObjBlock
 
             for (let j = i - 1; j >= 0; j--) {
                const MOVE_TO_CELL_NUM = group[j]
 
-               if (!MOVE_TO_CELL_NUM.canAccept(CELL_NUM.tile)) {
+               if (!MOVE_TO_CELL_NUM.canAccept(CELL_NUM.block)) {
                   break
                }
 
-               lastValidCellObjTile = MOVE_TO_CELL_NUM
+               lastValidCellObjBlock = MOVE_TO_CELL_NUM
             }
 
-            if (lastValidCellObjTile != null) {
-               PROMISES_ARR.push(CELL_NUM.tile.waitForTransition())
+            if (lastValidCellObjBlock != null) {
+               PROMISES_ARR.push(CELL_NUM.block.waitForTransition())
 
-               if (lastValidCellObjTile.tile != null) {
-                  lastValidCellObjTile.mergeTile = CELL_NUM.tile
+               if (lastValidCellObjBlock.block != null) {
+                  lastValidCellObjBlock.mergeBlock = CELL_NUM.block
                } else {
-                  lastValidCellObjTile.tile = CELL_NUM.tile
+                  lastValidCellObjBlock.block = CELL_NUM.block
                }
 
-               CELL_NUM.tile = null
+               CELL_NUM.block = null
             }
          }
 
@@ -133,14 +160,25 @@ function slideTiles(cells) {
    )
 }
 
-let canMoveUpFunc = () => canMove(GRID_OBJ_GRID.cellsByColumn)
+// let canMoveUpFunc = () => canMove(GRID_OBJ_GRID.cellsByColumn)
+// let canMoveDownFunc = () => canMove(GRID_OBJ_GRID.cellsByColumn.map(column => [...column].reverse()))
+// let canMoveLeftFunc = () => canMove(GRID_OBJ_GRID.cellsByRow)
+// let canMoveRightFunc = () => canMove(GRID_OBJ_GRID.cellsByRow.map(row => [...row].reverse()))
+function canMoveUp() {
+   canMove(GRID_OBJ_GRID.cellsByColumn)
+}
 
-let canMoveDownFunc = () => canMove(GRID_OBJ_GRID.cellsByColumn.map(column => [...column].reverse()))
+function canMoveDown() {
+   canMove(GRID_OBJ_GRID.cellsByColumn.map(column => [...column].reverse()))
+}
 
-let canMoveLeftFunc = () => canMove(GRID_OBJ_GRID.cellsByRow)
+function canMoveLeft() {
+   canMove(GRID_OBJ_GRID.cellsByRow)
+}
 
-let canMoveRightFunc = () => canMove(GRID_OBJ_GRID.cellsByRow.map(row => [...row].reverse()))
-
+function canMoveRight() {
+   canMove(GRID_OBJ_GRID.cellsByRow.map(row => [...row].reverse()))
+}
 
 function canMove(cells) {
    return cells.some(group => {
@@ -149,13 +187,13 @@ function canMove(cells) {
             return false
          }
 
-         if (cell.tile == null) {
+         if (cell.block == null) {
             return false
          }
 
          const MOVING_CELL_NUM = group[index - 1]
 
-         let isMovableBool = MOVING_CELL_NUM.canAccept(cell.tile)
+         let isMovableBool = MOVING_CELL_NUM.canAccept(cell.block)
          return isMovableBool
       })
    })
