@@ -1,7 +1,7 @@
 const GRID_SIZE_NUM = 4 // Number of columns and rows (square).
 const CELL_SIZE_NUM = 10 // Size of each block in 'vmin' units.
 const CELL_GAP_NUM = 1 // Size of the gap between each block in 'vmin' units.
-const DEBUG_MODE = true // Displays a tile merge log.
+const DEBUG_MODE = true // Displays a block merge log.
 
 var totalScoreNum = 0 // Total score for the whole game.
 var bonusXNum = 1
@@ -52,7 +52,7 @@ export default class Grid {
    }
 
    get #emptyCells() {
-      return this.#cells.filter(cell => cell.tile == null)
+      return this.#cells.filter(cell => cell.block == null)
    }
 
    randomEmptyCell() {
@@ -65,8 +65,8 @@ class Cell {
    #cellElement
    #x
    #y
-   #tile
-   #mergeTile
+   #block
+   #mergeBlock
 
    constructor(cellElement, x, y) {
       this.#cellElement = cellElement
@@ -82,54 +82,54 @@ class Cell {
       return this.#y
    }
 
-   get tile() {
-      return this.#tile
+   get block() {
+      return this.#block
    }
 
-   set tile(value) {
-      this.#tile = value
+   set block(value) {
+      this.#block = value
 
       if (value == null) {
          return
       }
 
-      this.#tile.x = this.#x
-      this.#tile.y = this.#y
+      this.#block.x = this.#x
+      this.#block.y = this.#y
    }
 
-   get mergeTile() {
-      return this.#mergeTile
+   get mergeBlock() {
+      return this.#mergeBlock
    }
 
-   set mergeTile(value) {
-      this.#mergeTile = value
+   set mergeBlock(value) {
+      this.#mergeBlock = value
 
       if (value == null) {
          return
       }
 
-      this.#mergeTile.x = this.#x
-      this.#mergeTile.y = this.#y
+      this.#mergeBlock.x = this.#x
+      this.#mergeBlock.y = this.#y
    }
 
-   canAccept(tile) {
-      if (this.tile == null) {
+   canAccept(block) {
+      if (this.block == null) {
          return true
       }
 
-      if (this.mergeTile == null && this.tile.value === tile.value) {
+      if (this.mergeBlock == null && this.block.value === block.value) {
          return true
       }
 
-      if ((this.tile.value == 0 || tile.value == 0) && (tile.value == '⍬' || this.tile.value == '⍬')) {
+      if ((this.block.value == 0 || block.value == 0) && (block.value == '⍬' || this.block.value == '⍬')) {
          return true
       }
 
       return false
    }
 
-   mergeTiles() {
-      if (this.tile == null || this.mergeTile == null) {
+   mergeBlocks() {
+      if (this.block == null || this.mergeBlock == null) {
          return
       }
 
@@ -138,11 +138,11 @@ class Cell {
       Increase bonus multiplier (X) by 1.
       All score are multiplied by this factor, including recovered locked points.
       */
-      if (this.tile.value == 'X' && this.mergeTile.value == 'X') {
-         this.mergeTile.remove()
-         this.mergeTile = null
-         this.tile.remove()
-         this.tile = null
+      if (this.block.value == 'X' && this.mergeBlock.value == 'X') {
+         this.mergeBlock.remove()
+         this.mergeBlock = null
+         this.block.remove()
+         this.block = null
          bonusX = bonusX + 1
          document.getElementById('bonus-x').innerHTML = bonusX.toLocaleString()
 
@@ -159,11 +159,11 @@ class Cell {
       Points can be recovered from merging two ⍬s.
       If two 0s are merged again before locked points are collected, both scores are wiped.
       */
-      if (this.tile.value == 0 && this.mergeTile.value == 0) {
-         this.mergeTile.remove()
-         this.mergeTile = null
-         this.tile.remove()
-         this.tile = null
+      if (this.block.value == 0 && this.mergeBlock.value == 0) {
+         this.mergeBlock.remove()
+         this.mergeBlock = null
+         this.block.remove()
+         this.block = null
 
          // If there are no locked points, then lock the current score.
          // If there are already locked points, then wipe out the points.
@@ -187,11 +187,11 @@ class Cell {
       When two ⍬s are merged:
       Recovers locked points and is added back to total score times the X factor.
       */
-      if (this.tile.value == '⍬' && this.mergeTile.value == '⍬') {
-         this.mergeTile.remove()
-         this.mergeTile = null
-         this.tile.remove()
-         this.tile = null
+      if (this.block.value == '⍬' && this.mergeBlock.value == '⍬') {
+         this.mergeBlock.remove()
+         this.mergeBlock = null
+         this.block.remove()
+         this.block = null
 
          totalScoreNum = totalScoreNum + (lockedPointsNum * bonusXNum)
 
@@ -211,11 +211,11 @@ class Cell {
       When ⍬ and 0 are merged:
       Cancels each other out.
       */
-      if ((this.tile.value == 0 && this.mergeTile.value == '⍬') || (this.tile.value == '⍬' && this.mergeTile.value == 0)) {
-         this.mergeTile.remove()
-         this.mergeTile = null
-         this.tile.remove()
-         this.tile = null
+      if ((this.block.value == 0 && this.mergeBlock.value == '⍬') || (this.block.value == '⍬' && this.mergeBlock.value == 0)) {
+         this.mergeBlock.remove()
+         this.mergeBlock = null
+         this.block.remove()
+         this.block = null
 
          if (DEBUG_MODE) {
             $("#logging-div").prepend("⍬ and 0 cancelled<br>")
@@ -225,19 +225,19 @@ class Cell {
       }
 
       /*
-      Everything else should be standard game tiles.
+      Everything else should be standard game blocks.
       */
-      this.tile.value = this.tile.value + this.mergeTile.value
-      totalScoreNum += this.tile.value * bonusXNum
+      this.block.value = this.block.value + this.mergeBlock.value
+      totalScoreNum += this.block.value * bonusXNum
 
       if (DEBUG_MODE) {
-         $("#logging-div").prepend(`Numbers merged: ${this.tile.value}<br>`)
+         $("#logging-div").prepend(`Numbers merged: ${this.block.value}<br>`)
       }
 
       document.getElementById('score-value').innerHTML = totalScoreNum.toLocaleString()
 
-      this.mergeTile.remove()
-      this.mergeTile = null
+      this.mergeBlock.remove()
+      this.mergeBlock = null
    }
 }
 

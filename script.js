@@ -24,9 +24,8 @@ function inputHandler() {
    window.addEventListener(
       "keydown", 
       handleKeydown, 
-      { 
-         once: true 
-      })
+      {once: true}
+   )
 }
 
 inputHandler()
@@ -87,12 +86,12 @@ async function handleKeydown(e) {
    GRID_OBJ_GRID.cells.forEach(cell => cell.mergeBlocks())
 
    // Create a new block to place on the game board after successful move and add it on a random grid location...
-   const NEW_TILE_OBJ_TILE = new Block(GAME_BOARD_DOM_DIV, OPTIONS_OBJ, false)
-   GRID_OBJ_GRID.randomEmptyCell().block = NEW_TILE_OBJ_TILE
+   const NEW_BLOCK_OBJ_BLOCK = new Block(GAME_BOARD_DOM_DIV, OPTIONS_OBJ, false)
+   GRID_OBJ_GRID.randomEmptyCell().block = NEW_BLOCK_OBJ_BLOCK
 
    // After the new 
    if (!canMoveUp() && !canMoveDown() && !canMoveLeft() && !canMoveRight()) {
-      NEW_TILE_OBJ_TILE.waitForTransition(true).then(() => {
+      NEW_BLOCK_OBJ_BLOCK.waitForTransition(true).then(() => {
          $('#game-over-div').html("No moves left...<br>Game over!").css("color", "red")
       })
 
@@ -165,19 +164,19 @@ function slideBlocks(cells) {
 // let canMoveLeftFunc = () => canMove(GRID_OBJ_GRID.cellsByRow)
 // let canMoveRightFunc = () => canMove(GRID_OBJ_GRID.cellsByRow.map(row => [...row].reverse()))
 function canMoveUp() {
-   canMove(GRID_OBJ_GRID.cellsByColumn)
+   return canMove(GRID_OBJ_GRID.cellsByColumn)
 }
 
 function canMoveDown() {
-   canMove(GRID_OBJ_GRID.cellsByColumn.map(column => [...column].reverse()))
+   return canMove(GRID_OBJ_GRID.cellsByColumn.map(column => [...column].reverse()))
 }
 
 function canMoveLeft() {
-   canMove(GRID_OBJ_GRID.cellsByRow)
+   return canMove(GRID_OBJ_GRID.cellsByRow)
 }
 
 function canMoveRight() {
-   canMove(GRID_OBJ_GRID.cellsByRow.map(row => [...row].reverse()))
+   return canMove(GRID_OBJ_GRID.cellsByRow.map(row => [...row].reverse()))
 }
 
 function canMove(cells) {

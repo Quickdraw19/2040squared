@@ -1,58 +1,58 @@
-*,
-*::before,
+*, 
+*::before, 
 *::after {
-font-family: Arial;
+   font-family: Arial;
 }
 
 body {
-background-color: #333;
+   background-color: #333 !important;
 }
 
 .game-section {
-float: left;
-padding: var(--cell-gap);
+   float: left;
+   padding: var(--cell-gap);
 }
 
 #game-board {
-position: relative;
-display: inline-grid;
-font-size: 2em;
-background-color: #CCC;
-margin: 50px;
-grid-template-columns: repeat(var(--grid-size), var(--cell-size));
-grid-template-rows: repeat(var(--grid-size), var(--cell-size));
-gap: var(--cell-gap);
-border-radius: 1vmin;
+   position: relative;
+   display: inline-grid;
+   font-size: 2em;
+   background-color: #CCC !important;
+   margin: 50px;
+   grid-template-columns: repeat(var(--grid-size), var(--cell-size));
+   grid-template-rows: repeat(var(--grid-size), var(--cell-size));
+   gap: var(--cell-gap);
+   border-radius: 1vmin;
 }
 
 .cell {
-background-color: #AAA;
-border-radius: 1vmin;
+   background-color: #AAA !important;
+   border-radius: 1vmin;
 }
 
-.tile {
-position: absolute;
-display: flex;
-justify-content: center;
-align-items: center;
-background-color: red;
-width: var(--cell-size);
-height: var(--cell-size);
-border-radius: 1vmin;
-top: calc(var(--y) * (var(--cell-size) + var(--cell-gap)) + var(--cell-gap));
-left: calc(var(--x) * (var(--cell-size) + var(--cell-gap)) + var(--cell-gap));
-font-weight: bold;
-background-color: hsl(200, 100%, var(--background-lightness));
-color: hsl(200, 25%, var(--text-lightness));
-animation: show 400ms ease-in-out;
-transition: 200ms ease-in-out;
+.block {
+   position: absolute;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   background-color: red;
+   width: var(--cell-size);
+   height: var(--cell-size);
+   border-radius: 1vmin;
+   top: calc(var(--y) * (var(--cell-size) + var(--cell-gap)) + var(--cell-gap));
+   left: calc(var(--x) * (var(--cell-size) + var(--cell-gap)) + var(--cell-gap));
+   font-weight: bold;
+   background-color: hsl(200, 100%, var(--background-lightness));
+   color: hsl(200, 25%, var(--text-lightness));
+   animation: show 400ms ease-in-out;
+   transition: 200ms ease-in-out;
 }
 
 @keyframes show {
-0% {
-opacity: .5;
-transform: scale(1);
-}
+   0% {
+      opacity: .5;
+      transform: scale(1);
+   }
 }
 
 h3 {
