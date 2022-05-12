@@ -1,6 +1,6 @@
-const GRID_SIZE_NUM = 4 // Number of columns and rows (square).
-const CELL_SIZE_NUM = 10 // Size of each block in 'vmin' units.
-const CELL_GAP_NUM = 1 // Size of the gap between each block in 'vmin' units.
+const GRID_SIZE = 4 // Number of columns and rows (square).
+const CELL_SIZE = 10 // Size of each block in 'vmin' units.
+const CELL_PADDING = 1 // Size of the gap between each block in 'vmin' units.
 const DEBUG_MODE = true // Displays a block merge log.
 
 var totalScoreNum = 0 // Total score for the whole game.
@@ -8,108 +8,109 @@ var bonusXNum = 1
 var lockedPointsNum = 0
 
 export default class Grid {
-   #cells // ? Array storing the cell info for the whole grid.
+   cells // ? Array storing the cell info for the whole grid.
 
    // @gridElement: HTML element (ie. <div>) where the grid will be placed.
    constructor(gridElement) {
       // Set up the grid area.
-      gridElement.style.setProperty("--grid-size", GRID_SIZE_NUM)
-      gridElement.style.setProperty("--cell-size", `${CELL_SIZE_NUM}vmin`)
-      gridElement.style.setProperty("--cell-gap", `${CELL_GAP_NUM}vmin`)
+      gridElement.style.setProperty("--grid-size", GRID_SIZE)
+      gridElement.style.setProperty("--cell-size", `${CELL_SIZE}vmin`)
+      gridElement.style.setProperty("--cell-padding", `${CELL_PADDING}vmin`)
 
       // Set up the block within the grid.
       // map() runs a given function for each element of an array.
-      this.#cells = createCellElements(gridElement).map(
+      this.cells = createCellElements(gridElement).map(
          function (cellElement, index) { // Current element in the array, array index of the element.
-            let blockObjCell = new Cell(
+            let block = new Cell(
                cellElement,
-               index % GRID_SIZE_NUM,
-               Math.floor(index / GRID_SIZE_NUM)
+               index % GRID_SIZE,
+               Math.floor(index / GRID_SIZE)
                )
 
-            return blockObjCell
+            return block
       })
    }
 
-   get cells() {
-      return this.#cells
+   get getCells() {
+      return this.cells
    }
 
-   get cellsByRow() {
-      return this.#cells.reduce((cellGrid, cell) => {
+   get getCellRows() {
+      return this.cells.reduce((cellGrid, cell) => {
          cellGrid[cell.y] = cellGrid[cell.y] || []
          cellGrid[cell.y][cell.x] = cell
          return cellGrid
       }, [])
    }
 
-   get cellsByColumn() {
-      return this.#cells.reduce((cellGrid, cell) => {
+   get getCellsColumns() {
+      return this.cells.reduce((cellGrid, cell) => {
          cellGrid[cell.x] = cellGrid[cell.x] || []
          cellGrid[cell.x][cell.y] = cell
          return cellGrid
       }, [])
    }
 
-   get #emptyCells() {
-      return this.#cells.filter(cell => cell.block == null)
+   get getEmptyCells() {
+      let emptyCells = this.cells.filter(cell => cell.block == null)
+      return emptyCells
    }
 
-   randomEmptyCell() {
-      const RANDOM_INDEX_NUM = Math.floor(Math.random() * this.#emptyCells.length)
-      return this.#emptyCells[RANDOM_INDEX_NUM]
+   getRandomEmptyCell() {
+      let emptyCell = this.getEmptyCells[Math.floor(Math.random() * this.getEmptyCells.length)]
+      return emptyCell
    }
 }
 
 class Cell {
-   #cellElement
-   #x
-   #y
-   #block
-   #mergeBlock
+   cellElement
+   x
+   y
+   block
+   mergeBlock
 
    constructor(cellElement, x, y) {
-      this.#cellElement = cellElement
-      this.#x = x
-      this.#y = y
+      this.cellElement = cellElement
+      this.x = x
+      this.y = y
    }
 
-   get x() {
-      return this.#x
+   get getX() {
+      return this.x
    }
 
-   get y() {
-      return this.#y
+   get getY() {
+      return this.y
    }
 
-   get block() {
-      return this.#block
+   get getBlock() {
+      return this.block
    }
 
-   set block(value) {
-      this.#block = value
+   set setBlock(value) {
+      this.block = value
 
       if (value == null) {
          return
       }
 
-      this.#block.x = this.#x
-      this.#block.y = this.#y
+      this.block.x = this.x
+      this.block.y = this.y
    }
 
-   get mergeBlock() {
-      return this.#mergeBlock
+   get getMergeBlock() {
+      return this.mergeBlock
    }
 
-   set mergeBlock(value) {
-      this.#mergeBlock = value
+   set setMergeBlock(value) {
+      this.mergeBlock = value
 
       if (value == null) {
          return
       }
 
-      this.#mergeBlock.x = this.#x
-      this.#mergeBlock.y = this.#y
+      this.mergeBlock.x = this.x
+      this.mergeBlock.y = this.y
    }
 
    canAccept(block) {
@@ -242,14 +243,14 @@ class Cell {
 }
 
 function createCellElements(gridElement) {
-const CELLS_ARR = []
+   let cells = []
 
-   for (let i = 0; i < GRID_SIZE_NUM * GRID_SIZE_NUM; i++) {
-      const CELL_DOM_DIV = document.createElement("div")
-      CELL_DOM_DIV.classList.add("cell")
-      CELLS_ARR.push(CELL_DOM_DIV)
-      gridElement.append(CELL_DOM_DIV)
+   for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
+      let cell = document.createElement("div")
+      cell.classList.add("cell")
+      cells.push(cell)
+      gridElement.append(cell)
    }
 
-   return CELLS_ARR
+   return cells
 }
