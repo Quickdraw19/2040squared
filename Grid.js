@@ -8,7 +8,7 @@ var bonusXNum = 1
 var lockedPointsNum = 0
 
 export default class Grid {
-   cells // ? Array storing the cell info for the whole grid.
+   #cells // ? Array storing the cell info for the whole grid.
 
    // @gridElement: HTML element (ie. <div>) where the grid will be placed.
    constructor(gridElement) {
@@ -19,7 +19,7 @@ export default class Grid {
 
       // Set up the block within the grid.
       // map() runs a given function for each element of an array.
-      this.cells = createCellElements(gridElement).map(
+      this.#cells = createCellElements(gridElement).map(
          function (cellElement, index) { // Current element in the array, array index of the element.
             let block = new Cell(
                cellElement,
@@ -31,19 +31,20 @@ export default class Grid {
       })
    }
 
-   get getCells() {
+   get cells() {
       return this.cells
    }
 
-   get getCellRows() {
+   get cellRows() {
       return this.cells.reduce((cellGrid, cell) => {
          cellGrid[cell.y] = cellGrid[cell.y] || []
          cellGrid[cell.y][cell.x] = cell
          return cellGrid
       }, [])
+
    }
 
-   get getCellsColumns() {
+   get cellsColumns() {
       return this.cells.reduce((cellGrid, cell) => {
          cellGrid[cell.x] = cellGrid[cell.x] || []
          cellGrid[cell.x][cell.y] = cell
@@ -51,58 +52,57 @@ export default class Grid {
       }, [])
    }
 
-   get getEmptyCells() {
-      let emptyCells = this.cells.filter(cell => cell.block == null)
-      return emptyCells
+   get emptyCells() {
+      return this.#cells.filter(cell => cell.block == null)
    }
 
    getRandomEmptyCell() {
-      let emptyCell = this.getEmptyCells[Math.floor(Math.random() * this.getEmptyCells.length)]
-      return emptyCell
+      let randomIndex = Math.floor(Math.random() * this.emptyCells.length)
+      return this.emptyCells[randomIndex]
    }
 }
 
 class Cell {
    cellElement
-   x
-   y
-   block
+   #x
+   #y
+   #block
    mergeBlock
 
    constructor(cellElement, x, y) {
       this.cellElement = cellElement
-      this.x = x
-      this.y = y
+      this.#x = x
+      this.#y = y
    }
 
-   get getX() {
+   get x() {
       return this.x
    }
 
-   get getY() {
+   get y() {
       return this.y
    }
 
-   get getBlock() {
-      return this.block
+   get block() {
+      return this.#block
    }
 
-   set setBlock(value) {
-      this.block = value
+   set block(value) {
+      this.#block = value
 
       if (value == null) {
          return
       }
 
-      this.block.x = this.x
-      this.block.y = this.y
+      this.#block.x = this.#x
+      this.#block.y = this.#y
    }
 
-   get getMergeBlock() {
+   get mergeBlock() {
       return this.mergeBlock
    }
 
-   set setMergeBlock(value) {
+   set mergeBlock(value) {
       this.mergeBlock = value
 
       if (value == null) {
@@ -113,21 +113,7 @@ class Cell {
       this.mergeBlock.y = this.y
    }
 
-   canAccept(block) {
-      if (this.block == null) {
-         return true
-      }
-
-      if (this.mergeBlock == null && this.block.value === block.value) {
-         return true
-      }
-
-      if ((this.block.value == 0 || block.value == 0) && (block.value == '⍬' || this.block.value == '⍬')) {
-         return true
-      }
-
-      return false
-   }
+   canAccept = (block) => (this.block == null || (this.mergeBlock == null && this.block.value === block.value))
 
    mergeBlocks() {
       if (this.block == null || this.mergeBlock == null) {
@@ -139,7 +125,7 @@ class Cell {
       Increase bonus multiplier (X) by 1.
       All score are multiplied by this factor, including recovered locked points.
       */
-      if (this.block.value == 'X' && this.mergeBlock.value == 'X') {
+      if (this.block.blockValue == 'X' && this.mergeBlock.blockValue == 'X') {
          this.mergeBlock.remove()
          this.mergeBlock = null
          this.block.remove()
@@ -160,7 +146,7 @@ class Cell {
       Points can be recovered from merging two ⍬s.
       If two 0s are merged again before locked points are collected, both scores are wiped.
       */
-      if (this.block.value == 0 && this.mergeBlock.value == 0) {
+      if (this.block.blockValue == 0 && this.mergeBlock.blockValue == 0) {
          this.mergeBlock.remove()
          this.mergeBlock = null
          this.block.remove()
@@ -188,7 +174,7 @@ class Cell {
       When two ⍬s are merged:
       Recovers locked points and is added back to total score times the X factor.
       */
-      if (this.block.value == '⍬' && this.mergeBlock.value == '⍬') {
+      if (this.block.blockValue == '⍬' && this.mergeBlock.blockValue == '⍬') {
          this.mergeBlock.remove()
          this.mergeBlock = null
          this.block.remove()
@@ -212,7 +198,7 @@ class Cell {
       When ⍬ and 0 are merged:
       Cancels each other out.
       */
-      if ((this.block.value == 0 && this.mergeBlock.value == '⍬') || (this.block.value == '⍬' && this.mergeBlock.value == 0)) {
+      if ((this.block.blockValue == 0 && this.mergeBlock.blockValue == '⍬') || (this.block.blockValue == '⍬' && this.mergeBlock.blockValue == 0)) {
          this.mergeBlock.remove()
          this.mergeBlock = null
          this.block.remove()
@@ -228,11 +214,11 @@ class Cell {
       /*
       Everything else should be standard game blocks.
       */
-      this.block.value = this.block.value + this.mergeBlock.value
-      totalScoreNum += this.block.value * bonusXNum
+      this.block.blockValue = this.block.blockValue + this.mergeBlock.blockValue
+      totalScoreNum += this.block.blockValue * bonusXNum
 
       if (DEBUG_MODE) {
-         $("#logging-div").prepend(`Numbers merged: ${this.block.value}<br>`)
+         $("#logging-div").prepend(`Numbers merged: ${this.block.blockValue}<br>`)
       }
 
       document.getElementById('score-value').innerHTML = totalScoreNum.toLocaleString()
@@ -243,14 +229,14 @@ class Cell {
 }
 
 function createCellElements(gridElement) {
-   let cells = []
+   let newCells = []
 
    for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
-      let cell = document.createElement("div")
-      cell.classList.add("cell")
-      cells.push(cell)
-      gridElement.append(cell)
+      let cellDiv = document.createElement("div")
+      cellDiv.classList.add("cell")
+      newCells.push(cellDiv)
+      gridElement.append(cellDiv)
    }
 
-   return cells
+   return newCells
 }

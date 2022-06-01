@@ -1,6 +1,7 @@
 *, 
 *::before, 
 *::after {
+   /* box-sizing: border-box; */
    font-family: Arial;
 }
 
@@ -12,6 +13,13 @@ body {
    float: left;
    padding: var(--cell-padding);
 }
+
+#container {
+   justify-content: center;
+   align-items: center;
+   height: 60vh;
+   margin: 50px;
+ }
 
 #game-board {
    position: relative;
@@ -30,12 +38,11 @@ body {
    border-radius: 1vmin;
 }
 
-.block {
+ .block {
    position: absolute;
    display: flex;
    justify-content: center;
    align-items: center;
-   background-color: red;
    width: var(--cell-size);
    height: var(--cell-size);
    border-radius: 1vmin;

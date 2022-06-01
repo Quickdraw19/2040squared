@@ -7,9 +7,9 @@ const GRID = new Grid(GAME_BOARD)
 
 // Game options...
 const OPTIONS = {
-   'specialBlockPercentage': 0.5, // Probability that a special block ("0", "⍬", "X") will appear; eg, 0.1 = 10%.
-   'multiplierBlockPercentage': 0, // Probability that an "X" will appear as a special block; eg, 0.2 = 20% of the special blocks, or 2% of all blocks.
-   'useblocks': 7 // block options: 1 = number, 2 = "0" , 4 = "⍬", 8 = "X", 16 = , 32 = , and so on...
+   'specialBlockPercentage': 0.4, // Probability that a special block ("0", "⍬", "X") will appear; eg, 0.1 = 10%.
+   'multiplierBlockPercentage': 0.2, // Probability that an "X" will appear as a special block; eg, 0.2 = 20% of the special blocks, or 2% of all blocks.
+   'useblocks': 1 // block options: 1 = number, 2 = "0" , 4 = "⍬", 8 = "X", 16 = , 32 = , and so on...
 }
 
 // Intialize the game board with 2 numberic blocks....
@@ -20,13 +20,7 @@ GRID.getRandomEmptyCell().block = new Block(GAME_BOARD, OPTIONS, true)
 let MoveCount = 0
 
 // Do this have to be called all the time after it's been used?
-function inputHandler() {
-   window.addEventListener(
-      "keydown", 
-      handleKeydown, 
-      {once: true}
-   )
-}
+let inputHandler = () => window.addEventListener("keydown", handleKeydown, { once: true })
 
 inputHandler()
 
@@ -101,19 +95,24 @@ async function handleKeydown(e) {
    inputHandler()
 }
 
-let SlideBlockUp = () => slideBlocks(GRID.getCellsColumns)
+let SlideBlockUp = () => slideBlocks(GRID.cellsColumns)
 
-let SlideBlockDown = () => slideBlocks(GRID.getCellsColumns.map(column => [...column].reverse()))
+let SlideBlockDown = () => slideBlocks(GRID.cellsColumns.map(column => [...column].reverse()))
 
-let SlideBlockLeft = () => slideBlocks(GRID.getCellRows)
+let SlideBlockLeft = () => {
+//console.log(GRID.cellRows)
+   slideBlocks(GRID.cellRows)
+}
 
-let SlideBlockRight = () => slideBlocks(GRID.getCellRows.map(row => [...row].reverse()))
+let SlideBlockRight = () => {
+//console.log(GRID.cellRows)
+   slideBlocks(GRID.cellRows.map(row => [...row].reverse()))
+}
 
 function slideBlocks(cells) {
-   //@TODO - Make sure I understand what this promise is doing.
-   return Promise.all(
-      cells.flatMap(group => { //@TODO - what is flatMap() and what data is in `group`.
-         let promises = [] //@TODO - make sure I understand what this is.
+   return Promise.all( // Promise.all() waits for all async requests to be finished.
+      cells.flatMap(group => { // flatMap() is a ES2019 function which combines the map() and flat() functions. map() applies a function to every non-empty element of an array. flat() flatten arrays. eg. [1, 2, 3, [4, 5]], gets turned into [1, 2, 3, 4, 5], [1, 2, [3, [4, 5]]] gets turned into [1, 2, 3, [4, 5]].
+         let promises = [] // Array of individual promises.
 
          for (let i = 1; i < group.length; i++) {
             let cellNumber = group[i]
@@ -152,27 +151,7 @@ function slideBlocks(cells) {
    )
 }
 
-function canSlideUp() {
-   let canSlide = canSlide(GRID.getCellsColumns)
-   return canSlide
-}
-
-function canSlideDown() {
-   let canSlide =  canSlide(GRID.getCellsColumns.map(column => [...column].reverse()))
-   return canSlide
-}
-
-function canSlideLeft() {
-   let canSlide =  canSlide(GRID.getCellRows)
-   return canSlide
-}
-
-function canSlideRight() {
-   let canSlide =  canSlide(GRID.getCellRows.map(row => [...row].reverse()))
-   return canSlide
-}
-
-function canSlide(cells) {
+function determineCanSlide(cells) {
    return cells.some(group => {
       return group.some((cell, index) => {
          if (index === 0) {
@@ -191,11 +170,31 @@ function canSlide(cells) {
    })
 }
 
-function printGrid() {
-   //console.log(GRID.getCellRows)
-   //GRID.cells.forEach(cell => console.log(cell))
-   GRID.getCellRows.forEach(cell => console.log(cell))
+function canSlideUp() {
+   let canSlide = determineCanSlide(GRID.cellsColumns)
+   return canSlide
+}
 
+function canSlideDown() {
+   let canSlide =  determineCanSlide(GRID.cellsColumns.map(column => [...column].reverse()))
+   return canSlide
+}
+
+function canSlideLeft() {
+//   console.log(GRID.cellRows)
+   let canSlide =  determineCanSlide(GRID.cellRows)
+   return canSlide
+}
+
+function canSlideRight() {
+//   console.log(GRID.cellRows)
+   let canSlide =  determineCanSlide(GRID.cellRows.map(row => [...row].reverse()))
+   return canSlide
+}
+
+function printGrid() {
+   console.log(GRID.cellRows)
+   GRID.cells.forEach(cell => console.log(cell))
 }
 
 // function download(filename, text) {

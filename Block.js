@@ -1,9 +1,8 @@
 export default class Block {
-   // Do these need to be private?
    blockElement
-   x
-   y
-   value
+   #x
+   #y
+   #blockValue
    specialProb
    multiplyProb
    blockTypes
@@ -18,18 +17,15 @@ export default class Block {
       this.multiplyProb = options.multiplierBlockPercentage
       this.blockTypes = options.useBlocks
 
-      this.value = this.getBlockValue(onlyNumbers)
+      this.blockValue = this.getBlockValue(onlyNumbers)
    }
 
-   get value() {
-      return this.value
+   get blockValue() {
+      return this.#blockValue
    }
 
-   /**
-    * @param {string | number} v
-    */
-   set value(v) {
-      this.value = v
+   set blockValue(v) {
+      this.#blockValue = v
       this.blockElement.textContent = v
 
       if (v == 0) {
@@ -57,14 +53,14 @@ export default class Block {
       }
    }
 
-   set x(value) {
-      this.x = value
-      this.blockElement.style.setProperty("--x", value)
+   set x(blockValue) {
+      this.#x = blockValue
+      this.blockElement.style.setProperty("--x", blockValue)
    }
 
-   set y(value) {
-      this.y = value
-      this.blockElement.style.setProperty("--y", value)
+   set y(blockValue) {
+      this.#y = blockValue
+      this.blockElement.style.setProperty("--y", blockValue)
    }
 
    // Decided to always start with numbers.
@@ -73,27 +69,40 @@ export default class Block {
          let dealSpecialBlock = Math.random() <= this.specialProb
 
          if (dealSpecialBlock) {
-            let dealMultiplier =  Math.random() <= this.multiplyProb
+            let useZero = this.blockTypes & 2
+            let useNeg  = this.blockTypes & 4
+            let useMult = this.blockTypes & 8
 
-            if (dealMultiplier) {
-               return "X"
+            // Order of precedence I decided upon for now...
+            if (useMult) {
+               let dealMultiplier =  Math.random() <= this.multiplyProb
+               if (dealMultiplier) {
+                  return "X"
+               }
             }
 
-            let useZero = this.blockTypes & 2
-            let useNeg = this.blockTypes & 4
+            if (useZero) {
+               let dealZero = Math.random() <= 0.5
+               if (dealZero) {
+                  return '0'
+               }
+            }
 
-            if (useZero && useNeg) return Math.random() > 0.5 ? 0 : '⍬'
-            if (useZero && !useNeg) return "0"
-            // The only thing left...
-            return "⍬"
+            if (useNeg) {
+               return '⍬'
+            }
+
+            // If a special block is called for and none are picked, there isn't an 
+            // uncomplicated way to return a default. I had the default of Neg, but 
+            // if neg isn't allowed in the options, then it was returning it anyway.
+            // I figured it's better to return a regular number.
          }
       }
 
-      let randomNum = Math.random() > 0.5 ? 2 : 4
-      return randomNum
+      return Math.random() > 0.5 ? 2 : 4
    }
 
-   //remove = () => this.blockElement.remove()
+   remove = () => this.blockElement.remove()
 
    waitForTransition(animation = false) {
       return new Promise(resolve => {
