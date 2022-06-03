@@ -118,7 +118,7 @@ function slideBlocks(cells) {
             let cellNumber = group[i]
 
             if (cellNumber.block == null) {
-               continue //@TODO - make sure I understand what continue and break does in Javascript.
+               continue // Moves on to the next iteration of the for loop.
             }
 
             let lastValidCell //@TODO - what does a valid cell constitute and what is stored here?
@@ -127,7 +127,7 @@ function slideBlocks(cells) {
                let moveToCell = group[j]
 
                if (!moveToCell.canAccept(cellNumber.block)) {
-                  break
+                  break // Get out of this for loop.
                }
 
                lastValidCell = moveToCell

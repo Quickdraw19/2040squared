@@ -1,7 +1,7 @@
 *, 
 *::before, 
 *::after {
-   /* box-sizing: border-box; */
+   box-sizing: border-box;
    font-family: Arial;
 }
 
@@ -23,18 +23,20 @@ body {
 
 #game-board {
    position: relative;
-   display: inline-grid;
-   font-size: 2em;
-   background-color: #CCC !important;
-   margin: 50px;
    grid-template-columns: repeat(var(--grid-size), var(--cell-size));
    grid-template-rows: repeat(var(--grid-size), var(--cell-size));
    gap: var(--cell-padding);
    border-radius: 1vmin;
+   display: grid;
+   font-size: 2em;
+   background-color: #CCC;
+   margin: 50px;
+
+   
 }
 
 .cell {
-   background-color: #AAA !important;
+   background-color: #AAA;
    border-radius: 1vmin;
 }
 
