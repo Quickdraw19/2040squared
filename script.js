@@ -17,7 +17,7 @@ GRID.getRandomEmptyCell().block = new Block(GAME_BOARD, OPTIONS, true)
 GRID.getRandomEmptyCell().block = new Block(GAME_BOARD, OPTIONS, true)
 
 // To track how many moves the players have made...
-var MoveCount = 0
+let MoveCount = 0
 
 // Do this have to be called all the time after it's been used?
 let inputHandler = () => window.addEventListener("keydown", handleKeydown, { once: true })
@@ -80,7 +80,7 @@ async function handleKeydown(e) {
    GRID.cells.forEach(cell => cell.mergeBlocks())
 
    // Create a new block to place on the game board after successful move and add it on a random grid location...
-   const newBlock = new Block(GAME_BOARD, OPTIONS, false)
+   let newBlock = new Block(GAME_BOARD, OPTIONS, false)
    GRID.getRandomEmptyCell().block = newBlock
 
    // After the new 
@@ -112,10 +112,10 @@ let SlideBlockRight = () => {
 function slideBlocks(cells) {
    return Promise.all( // Promise.all() waits for all async requests to be finished.
       cells.flatMap(group => { // flatMap() is a ES2019 function which combines the map() and flat() functions. map() applies a function to every non-empty element of an array. flat() flatten arrays. eg. [1, 2, 3, [4, 5]], gets turned into [1, 2, 3, 4, 5], [1, 2, [3, [4, 5]]] gets turned into [1, 2, 3, [4, 5]].
-         const promises = [] // Array of individual promises.
+         let promises = [] // Array of individual promises.
 
          for (let i = 1; i < group.length; i++) {
-            const cellNumber = group[i]
+            let cellNumber = group[i]
 
             if (cellNumber.block == null) {
                continue //@TODO - make sure I understand what continue and break does in Javascript.
@@ -124,7 +124,7 @@ function slideBlocks(cells) {
             let lastValidCell //@TODO - what does a valid cell constitute and what is stored here?
 
             for (let j = i - 1; j >= 0; j--) {
-               const moveToCell = group[j]
+               let moveToCell = group[j]
 
                if (!moveToCell.canAccept(cellNumber.block)) {
                   break
@@ -162,7 +162,7 @@ function determineCanSlide(cells) {
             return false
          }
 
-         const movingCell = group[index - 1]
+         let movingCell = group[index - 1]
 
          return movingCell.canAccept(cell.block)
 

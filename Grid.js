@@ -3,9 +3,9 @@ const CELL_SIZE = 10 // Size of each block in 'vmin' units.
 const CELL_PADDING = 1 // Size of the gap between each block in 'vmin' units.
 const DEBUG_MODE = true // Displays a block merge log.
 
-var totalScoreNum = 0 // Total score for the whole game.
-var bonusXNum = 1
-var lockedPointsNum = 0
+let totalScoreNum = 0 // Total score for the whole game.
+let bonusXNum = 1
+let lockedPointsNum = 0
 
 export default class Grid {
    #cells // ? Array storing the cell info for the whole grid.
@@ -57,7 +57,7 @@ export default class Grid {
    }
 
    getRandomEmptyCell() {
-      const randomIndex = Math.floor(Math.random() * this.#emptyCells.length)
+      let randomIndex = Math.floor(Math.random() * this.#emptyCells.length)
       return this.#emptyCells[randomIndex]
    }
 }
@@ -229,10 +229,10 @@ class Cell {
 }
 
 function createCellElements(gridElement) {
-   const newCells = []
+   let newCells = []
 
    for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
-      const cellDiv = document.createElement("div")
+      let cellDiv = document.createElement("div")
       cellDiv.classList.add("cell")
       newCells.push(cellDiv)
       gridElement.append(cellDiv)

@@ -38,8 +38,8 @@ export default class Block {
          this.#blockElement.style.setProperty("color", "white")
          this.#blockElement.style.setProperty("background-color", "green")
       } else {
-         const power = Math.log2(v)
-         const bgLightness = 100 - power * 9
+         let power = Math.log2(v)
+         let bgLightness = 100 - power * 9
 
          this.#blockElement.style.setProperty(
          "--background-lightness",
@@ -66,23 +66,25 @@ export default class Block {
    // Decided to always start with numbers.
    getBlockValue(onlyNumber) {
       if (!onlyNumber) {
-         var dealSpecialBlock = Math.random() <= this.specialProb
+         let dealSpecialBlock = Math.random() <= this.specialProb
 
          if (dealSpecialBlock) {
-            var useZero = this.blockTypes & 2
-            var useNeg  = this.blockTypes & 4
-            var useMult = this.blockTypes & 8
+            let useZero = this.blockTypes & 2
+            let useNeg  = this.blockTypes & 4
+            let useMult = this.blockTypes & 8
 
             // Order of precedence I decided upon for now...
             if (useMult) {
-               var dealMultiplier =  Math.random() <= this.multiplyProb
+               let dealMultiplier =  Math.random() <= this.multiplyProb
+
                if (dealMultiplier) {
                   return "X"
                }
             }
 
             if (useZero) {
-               var dealZero = Math.random() <= 0.5
+               let dealZero = Math.random() <= 0.5
+               
                if (dealZero) {
                   return '0'
                }
