@@ -1,5 +1,5 @@
 export default class Block {
-   blockElement
+   #blockElement
    #x
    #y
    #blockValue
@@ -8,9 +8,9 @@ export default class Block {
    blockTypes
 
    constructor(blockContainer, options, onlyNumbers) {
-      this.blockElement = document.createElement("div")
-      this.blockElement.classList.add("block")
-      blockContainer.append(this.blockElement)
+      this.#blockElement = document.createElement("div")
+      this.#blockElement.classList.add("block")
+      blockContainer.append(this.#blockElement)
 
       // Set options.
       this.specialProb = options.specialBlockPercentage
@@ -26,27 +26,27 @@ export default class Block {
 
    set blockValue(v) {
       this.#blockValue = v
-      this.blockElement.textContent = v
+      this.#blockElement.textContent = v
 
       if (v == 0) {
-         this.blockElement.style.setProperty("color", "white")
-         this.blockElement.style.setProperty("background-color", "red")
+         this.#blockElement.style.setProperty("color", "white")
+         this.#blockElement.style.setProperty("background-color", "red")
       } else if (v == '⍬') {
-         this.blockElement.style.setProperty("color", "yellow")
-         this.blockElement.style.setProperty("background-color", "blue")
+         this.#blockElement.style.setProperty("color", "yellow")
+         this.#blockElement.style.setProperty("background-color", "blue")
       } else if (v == 'X') {
-         this.blockElement.style.setProperty("color", "white")
-         this.blockElement.style.setProperty("background-color", "green")
+         this.#blockElement.style.setProperty("color", "white")
+         this.#blockElement.style.setProperty("background-color", "green")
       } else {
-         let power = Math.log2(v)
-         let bgLightness = 100 - power * 9
+         const power = Math.log2(v)
+         const bgLightness = 100 - power * 9
 
-         this.blockElement.style.setProperty(
+         this.#blockElement.style.setProperty(
          "--background-lightness",
          `${bgLightness}%`
          )
 
-         this.blockElement.style.setProperty(
+         this.#blockElement.style.setProperty(
          "--text-lightness",
          `${bgLightness <= 50 ? 90 : 10}%`
          )
@@ -55,34 +55,34 @@ export default class Block {
 
    set x(blockValue) {
       this.#x = blockValue
-      this.blockElement.style.setProperty("--x", blockValue)
+      this.#blockElement.style.setProperty("--x", blockValue)
    }
 
    set y(blockValue) {
       this.#y = blockValue
-      this.blockElement.style.setProperty("--y", blockValue)
+      this.#blockElement.style.setProperty("--y", blockValue)
    }
 
    // Decided to always start with numbers.
    getBlockValue(onlyNumber) {
       if (!onlyNumber) {
-         let dealSpecialBlock = Math.random() <= this.specialProb
+         var dealSpecialBlock = Math.random() <= this.specialProb
 
          if (dealSpecialBlock) {
-            let useZero = this.blockTypes & 2
-            let useNeg  = this.blockTypes & 4
-            let useMult = this.blockTypes & 8
+            var useZero = this.blockTypes & 2
+            var useNeg  = this.blockTypes & 4
+            var useMult = this.blockTypes & 8
 
             // Order of precedence I decided upon for now...
             if (useMult) {
-               let dealMultiplier =  Math.random() <= this.multiplyProb
+               var dealMultiplier =  Math.random() <= this.multiplyProb
                if (dealMultiplier) {
                   return "X"
                }
             }
 
             if (useZero) {
-               let dealZero = Math.random() <= 0.5
+               var dealZero = Math.random() <= 0.5
                if (dealZero) {
                   return '0'
                }
@@ -102,11 +102,11 @@ export default class Block {
       return Math.random() > 0.5 ? 2 : 4
    }
 
-   remove = () => this.blockElement.remove()
+   remove = () => this.#blockElement.remove()
 
    waitForTransition(animation = false) {
       return new Promise(resolve => {
-         this.blockElement.addEventListener(
+         this.#blockElement.addEventListener(
             animation ? "animationend" : "transitionend",
             resolve,
             {

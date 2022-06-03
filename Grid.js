@@ -32,11 +32,11 @@ export default class Grid {
    }
 
    get cells() {
-      return this.cells
+      return this.#cells
    }
 
    get cellRows() {
-      return this.cells.reduce((cellGrid, cell) => {
+      return this.#cells.reduce((cellGrid, cell) => {
          cellGrid[cell.y] = cellGrid[cell.y] || []
          cellGrid[cell.y][cell.x] = cell
          return cellGrid
@@ -45,42 +45,42 @@ export default class Grid {
    }
 
    get cellsColumns() {
-      return this.cells.reduce((cellGrid, cell) => {
+      return this.#cells.reduce((cellGrid, cell) => {
          cellGrid[cell.x] = cellGrid[cell.x] || []
          cellGrid[cell.x][cell.y] = cell
          return cellGrid
       }, [])
    }
 
-   get emptyCells() {
+   get #emptyCells() {
       return this.#cells.filter(cell => cell.block == null)
    }
 
    getRandomEmptyCell() {
-      let randomIndex = Math.floor(Math.random() * this.emptyCells.length)
-      return this.emptyCells[randomIndex]
+      const randomIndex = Math.floor(Math.random() * this.#emptyCells.length)
+      return this.#emptyCells[randomIndex]
    }
 }
 
 class Cell {
-   cellElement
+   #cellElement
    #x
    #y
    #block
-   mergeBlock
+   #mergeBlock
 
    constructor(cellElement, x, y) {
-      this.cellElement = cellElement
+      this.#cellElement = cellElement
       this.#x = x
       this.#y = y
    }
 
    get x() {
-      return this.x
+      return this.#x
    }
 
    get y() {
-      return this.y
+      return this.#y
    }
 
    get block() {
@@ -99,21 +99,21 @@ class Cell {
    }
 
    get mergeBlock() {
-      return this.mergeBlock
+      return this.#mergeBlock
    }
 
    set mergeBlock(value) {
-      this.mergeBlock = value
+      this.#mergeBlock = value
 
       if (value == null) {
          return
       }
 
-      this.mergeBlock.x = this.x
-      this.mergeBlock.y = this.y
+      this.#mergeBlock.x = this.#x
+      this.#mergeBlock.y = this.#y
    }
 
-   canAccept = (block) => (this.block == null || (this.mergeBlock == null && this.block.value === block.value))
+   canAccept = (block) => (this.block == null || (this.mergeBlock == null && this.block.blockValue === block.blockValue))
 
    mergeBlocks() {
       if (this.block == null || this.mergeBlock == null) {
@@ -215,7 +215,7 @@ class Cell {
       Everything else should be standard game blocks.
       */
       this.block.blockValue = this.block.blockValue + this.mergeBlock.blockValue
-      totalScoreNum += this.block.blockValue * bonusXNum
+      totalScoreNum += this.#block.blockValue * bonusXNum
 
       if (DEBUG_MODE) {
          $("#logging-div").prepend(`Numbers merged: ${this.block.blockValue}<br>`)
@@ -229,10 +229,10 @@ class Cell {
 }
 
 function createCellElements(gridElement) {
-   let newCells = []
+   const newCells = []
 
    for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
-      let cellDiv = document.createElement("div")
+      const cellDiv = document.createElement("div")
       cellDiv.classList.add("cell")
       newCells.push(cellDiv)
       gridElement.append(cellDiv)
