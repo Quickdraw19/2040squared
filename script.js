@@ -33,7 +33,7 @@ async function handleKeydown(e) {
             return
          }
          
-         SlideBlockUp()
+         slideBlockUp()
          break
 
       case "ArrowDown":
@@ -42,7 +42,7 @@ async function handleKeydown(e) {
             return
          }
          
-         SlideBlockDown()
+         slideBlockDown()
          break
 
       case "ArrowLeft":
@@ -51,7 +51,7 @@ async function handleKeydown(e) {
             return
          }
          
-         SlideBlockLeft()
+         slideBlockLeft()
          break
 
       case "ArrowRight":
@@ -60,7 +60,7 @@ async function handleKeydown(e) {
             return
          }
          
-         SlideBlockRight()
+         slideBlockRight()
          break
 
       case "i":
@@ -80,7 +80,7 @@ async function handleKeydown(e) {
    GRID.cells.forEach(cell => cell.mergeBlocks())
 
    // Create a new block to place on the game board after successful move and add it on a random grid location...
-   let newBlock = new Block(GAME_BOARD, OPTIONS, false)
+   const newBlock = new Block(GAME_BOARD, OPTIONS, false)
    GRID.getRandomEmptyCell().block = newBlock
 
    // After the new 
@@ -95,19 +95,13 @@ async function handleKeydown(e) {
    inputHandler()
 }
 
-let SlideBlockUp = () => slideBlocks(GRID.cellsColumns)
+let slideBlockUp = () => slideBlocks(GRID.cellsColumns)
 
-let SlideBlockDown = () => slideBlocks(GRID.cellsColumns.map(column => [...column].reverse()))
+let slideBlockDown = () => slideBlocks(GRID.cellsColumns.map(column => [...column].reverse()))
 
-let SlideBlockLeft = () => {
-//console.log(GRID.cellRows)
-   slideBlocks(GRID.cellRows)
-}
+let slideBlockLeft = () => slideBlocks(GRID.cellRows)
 
-let SlideBlockRight = () => {
-//console.log(GRID.cellRows)
-   slideBlocks(GRID.cellRows.map(row => [...row].reverse()))
-}
+let slideBlockRight = () => slideBlocks(GRID.cellRows.map(row => [...row].reverse()))
 
 function slideBlocks(cells) {
    return Promise.all( // Promise.all() waits for all async requests to be finished.
@@ -151,6 +145,14 @@ function slideBlocks(cells) {
    )
 }
 
+let canSlideUp = () => determineCanSlide(GRID.cellsColumns)
+
+let canSlideDown = () => determineCanSlide(GRID.cellsColumns.map(column => [...column].reverse()))
+
+let canSlideLeft = () => determineCanSlide(GRID.cellRows)
+
+let canSlideRight = () => determineCanSlide(GRID.cellRows.map(row => [...row].reverse()))
+
 function determineCanSlide(cells) {
    return cells.some(group => {
       return group.some((cell, index) => {
@@ -162,7 +164,7 @@ function determineCanSlide(cells) {
             return false
          }
 
-         let movingCell = group[index - 1]
+         const movingCell = group[index - 1]
 
          return movingCell.canAccept(cell.block)
 
@@ -170,33 +172,10 @@ function determineCanSlide(cells) {
    })
 }
 
-function canSlideUp() {
-   let canSlide = determineCanSlide(GRID.cellsColumns)
-   return canSlide
-}
-
-function canSlideDown() {
-   let canSlide =  determineCanSlide(GRID.cellsColumns.map(column => [...column].reverse()))
-   return canSlide
-}
-
-function canSlideLeft() {
-//   console.log(GRID.cellRows)
-   let canSlide =  determineCanSlide(GRID.cellRows)
-   return canSlide
-}
-
-function canSlideRight() {
-//   console.log(GRID.cellRows)
-   let canSlide =  determineCanSlide(GRID.cellRows.map(row => [...row].reverse()))
-   return canSlide
-}
-
 function printGrid() {
    console.log(GRID.cellRows)
    GRID.cells.forEach(cell => console.log(cell))
 }
-
 // function download(filename, text) {
 //   let elementDomA = document.createElement('a');
 //   element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
