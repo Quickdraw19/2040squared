@@ -3,9 +3,9 @@ export default class Block {
    #x
    #y
    #blockValue
-   specialProb
-   multiplyProb
-   blockTypes
+   #specialProb
+   #multiplyProb
+   #blockTypes
 
    constructor(blockContainer, options, onlyNumbers) {
       this.#blockElement = document.createElement("div")
