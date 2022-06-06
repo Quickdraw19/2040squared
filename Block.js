@@ -69,9 +69,9 @@ export default class Block {
          let dealSpecialBlock = Math.random() <= this.specialProb
 
          if (dealSpecialBlock) {
-            let useZero = this.blockTypes & 2
-            let useNeg  = this.blockTypes & 4
-            let useMult = this.blockTypes & 8
+            let useZero = this.blockTypes & 1
+            let useNeg  = this.blockTypes & 2
+            let useMult = this.blockTypes & 4
 
             // Order of precedence I decided upon for now...
             if (useMult) {

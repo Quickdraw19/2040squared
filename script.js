@@ -9,7 +9,7 @@ const GRID = new Grid(GAME_BOARD)
 const OPTIONS = {
    'specialBlockPercentage': 0.4, // Probability that a special block ("0", "⍬", "X") will appear; eg, 0.1 = 10%.
    'multiplierBlockPercentage': 0.2, // Probability that an "X" will appear as a special block; eg, 0.2 = 20% of the special blocks, or 2% of all blocks.
-   'useBlocks': 3 // block options: 1 = number, 2 = "0" , 4 = "⍬", 8 = "X", 16 = , 32 = , and so on... Add those value together for each option you want.
+   'useBlocks': 4 // block options: 1 = "0" (zero) , 2 = "⍬" (zero neg), 4 = "X" (multiplier), 16 = {future use}, 32 = {future use}, and so on... Add those value together for each option you want.
 }
 
 // Intialize the game board with 2 numberic blocks....
