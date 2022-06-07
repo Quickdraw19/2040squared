@@ -4,7 +4,7 @@ const CELL_PADDING = 1 // Size of the gap between each block in 'vmin' units.
 const DEBUG_MODE = true // Displays a block merge log.
 
 let totalScoreNum = 0 // Total score for the whole game.
-let bonusXNum = 1
+let bonusX = 1
 let lockedPointsNum = 0
 
 export default class Grid {
@@ -180,7 +180,7 @@ class Cell {
          this.block.remove()
          this.block = null
 
-         totalScoreNum = totalScoreNum + (lockedPointsNum * bonusXNum)
+         totalScoreNum = totalScoreNum + (lockedPointsNum * bonusX)
 
          if (DEBUG_MODE) {
             $("#logging-div").prepend("⍬s merged<br>")
@@ -215,7 +215,7 @@ class Cell {
       Everything else should be standard game blocks.
       */
       this.block.blockValue = this.block.blockValue + this.mergeBlock.blockValue
-      totalScoreNum += this.#block.blockValue * bonusXNum
+      totalScoreNum += this.#block.blockValue * bonusX
 
       if (DEBUG_MODE) {
          $("#logging-div").prepend(`Numbers merged: ${this.block.blockValue}<br>`)

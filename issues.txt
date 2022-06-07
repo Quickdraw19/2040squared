@@ -2,11 +2,6 @@
 Currently working on:
 =====================
 Bugs:
-After refactoring, the slide transition isn't working anymore.
-
-
-
-
    Testing to make sure tiles are merging and scoring correctly - I'm seeing that 0 tiles don't 
    get removed (eventually say it with Neg tiles also) - the graphic representation.
 
