@@ -16,7 +16,10 @@ export default class Grid {
       gridElement.style.setProperty("--grid-size", GRID_SIZE)
       gridElement.style.setProperty("--cell-size", `${CELL_SIZE}vmin`)
       gridElement.style.setProperty("--cell-padding", `${CELL_PADDING}vmin`)
-
+      // gridElement.prop("--grid-size", GRID_SIZE)
+      // gridElement.prop("--cell-size", `${CELL_SIZE}vmin`)
+      // gridElement.prop("--cell-padding", `${CELL_PADDING}vmin`)
+      
       // Set up the block within the grid.
       // map() runs a given function for each element of an array.
       this.#cells = createCellElements(gridElement).map(
@@ -113,7 +116,7 @@ class Cell {
       this.#mergeBlock.y = this.#y
    }
 
-   canAccept = (block) => (this.block == null || (this.mergeBlock == null && this.block.blockValue === block.blockValue))
+   canAccept = (block) => this.block == null || (this.mergeBlock == null && this.block.blockValue === block.blockValue) || (block.blockValue == "0" && this.block.blockValue == "⍬") || (block.blockValue == "⍬" && this.block.blockValue == "0")
 
    mergeBlocks() {
       if (this.block == null || this.mergeBlock == null) {
@@ -121,7 +124,7 @@ class Cell {
       }
 
       /*
-      When two Xs are merged:
+      When two Xs are merged:ß
       Increase bonus multiplier (X) by 1.
       All score are multiplied by this factor, including recovered locked points.
       */
@@ -131,7 +134,7 @@ class Cell {
          this.block.remove()
          this.block = null
          bonusX = bonusX + 1
-         document.getElementById('bonus-x').innerHTML = bonusX.toLocaleString()
+         $('#bonus-x').html(bonusX.toLocaleString())
 
          if (DEBUG_MODE) {
             $("#logging-div").prepend("Xs merged<br>")
@@ -165,8 +168,8 @@ class Cell {
          }
 
          totalScoreNum = 0
-         document.getElementById('score-value').innerHTML = "0"
-         document.getElementById('locked-points').innerHTML = lockedPointsNum.toLocaleString()
+         $('#score-value').html("0")
+         $('#locked-points').html(lockedPointsNum.toLocaleString())
          return
       }
 
@@ -188,9 +191,9 @@ class Cell {
 
          lockedPointsNum = 0
 
-         document.getElementById('score-value').innerHTML = totalScoreNum.toLocaleString()
-         document.getElementById('locked-points').innerHTML = "0"
-         document.getElementById('bonus-x').innerHTML = "1"
+         $('#score-value').html(totalScoreNum.toLocaleString())
+         $('#locked-points').html("0")
+         $('#bonus-x').html("1")
          return
       }
 
@@ -221,7 +224,7 @@ class Cell {
          $("#logging-div").prepend(`Numbers merged: ${this.block.blockValue}<br>`)
       }
 
-      document.getElementById('score-value').innerHTML = totalScoreNum.toLocaleString()
+      $('#score-value').html(totalScoreNum.toLocaleString())
 
       this.mergeBlock.remove()
       this.mergeBlock = null

@@ -2,6 +2,8 @@
 Currently working on:
 =====================
 Bugs:
+Having trouble setting properties in the Grid constructor.
+
    Testing to make sure tiles are merging and scoring correctly - I'm seeing that 0 tiles don't 
    get removed (eventually say it with Neg tiles also) - the graphic representation.
 
@@ -42,6 +44,8 @@ Save score and record stats to file or cookie/local storage.
 Analytics: Log all movements, tiles created or modified, final scores, total moves. 
 
 Perhaps double the X considering the theme of the game.
+
+Add a "shot clock".
 
 =====
 Bugs:
